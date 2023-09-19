@@ -133,6 +133,14 @@ class Mysql implements Storage{
      * @return void
      * If id is missing, it will give the user an id! If not given an ID, then its because a user already exist with the username!
      */
+
+     private function create_save_insert_array(User $user) : array{
+        return array("username" => $user->getUsername(), "password" => $user->getPassword(), "type" => $user->getType(),
+        "first_name" => $user->getFirst_name(), "last_name" => $user->getLast_name(), "contact_number" => $user->getContact_number(),
+        "date_of_birth" => $user->getDate_of_birth()
+     );
+     }
+
     public function save_user(User $user){
        
         $this->lock();
@@ -140,9 +148,7 @@ class Mysql implements Storage{
             
             //$this->getConn()->query($sql);
 
-            $this->save_table("users",array("username" => $user->getUsername(), "password" => $user->getPassword(), "type" => $user->getType(),
-            "first_name" => $user->getFirst_name(), "last_name" => $user->getLast_name(), "contact_number" => $user->getContact_number()
-            ),array("id" => $user->getId()));
+            $this->save_table("users",$this->create_save_insert_array($user),array("id" => $user->getId()));
             
 
             $this->delete_all_relations($user);
@@ -262,6 +268,7 @@ class Mysql implements Storage{
             $user->setFirst_name($row["first_name"]);
             $user->setContact_number($row["contact_number"]);
             $user->setId($row["id"]);
+            $user->setDate_of_birth($row["date_of_birth"]);
             $this->load_parents_and_children($user);
             return $user;
         }
@@ -287,9 +294,7 @@ class Mysql implements Storage{
                 return USER_ALREADY_EXIST;
                 
             }
-            $this->insert_table("users",array("username" => $user->getUsername(), "password" => $user->getPassword(), "type" => $user->getType(),
-            "first_name" => $user->getFirst_name(), "last_name" => $user->getLast_name(), "contact_number" => $user->getContact_number()
-            ));
+            $this->insert_table("users",$this->create_save_insert_array($user));
            
             $user->setId($this->getConn()->insert_id);
 

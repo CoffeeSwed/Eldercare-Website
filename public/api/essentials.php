@@ -97,5 +97,22 @@
 		}
 		return $randomString;
 	}
+
+	function get_date_by_str($str,$basetime){
+		if($str != null){
+			if(strtotime($str)){
+				if($date = getDate(strtotime($str))){
+					if(is_array($date)){
+						return $date["year"]."-".$date["mon"]."-".$date["mday"];
+					}
+				}
+			}
+		}
+
+		return get_date_by_str($basetime,$basetime);
+	}
+		
+		
+
 	
 ?>

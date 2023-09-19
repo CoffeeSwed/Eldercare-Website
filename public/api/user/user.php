@@ -19,6 +19,8 @@
 
         private $pin;
 
+		private $date_of_birth;
+
 
         
         
@@ -113,6 +115,7 @@
         $this->setId(null);
         $this->parents = array();
 		$this->children = array();
+		$this->setDate_of_birth("Hejsan!");
     }
 
     public function add_parent(string $user_id){
@@ -199,6 +202,7 @@
 	public function to_json(){
 		return array("username" => $this->getUsername(), "type" => $this->getType(), "id" => $this->getId(), "pin" => $this->getPin(),
 	"first_name" => $this->getFirst_name(), "last_name" => $this->getLast_name(), "contact_number" => $this->getContact_number(),
+	"date_of_birth" => $this->getDate_of_birth(),
 	"children" => $this->get_children(),
 	 "parents" => $this->get_parents());
 	}
@@ -259,5 +263,21 @@
 	}
 	
 	
+
+	/**
+	 * @return mixed
+	 */
+	public function getDate_of_birth() {
+		return $this->date_of_birth;
+	}
+	
+	/**
+	 * @param mixed $date_of_birth 
+	 * @return self
+	 */
+	public function setDate_of_birth($date_of_birth): self {
+		$this->date_of_birth = get_date_by_str($date_of_birth,"1800-01-01");
+		return $this;
+	}
 }
 ?>
