@@ -7,6 +7,7 @@ class Mysql implements Storage{
 
     //How many times we have locked, if we unlock and lock_count == 0, we unlock all!
     private $lock_count = 0;
+    private array $user_cache;
 
     
     private function lock(){
@@ -15,6 +16,7 @@ class Mysql implements Storage{
             $exec = $this->getConn()->prepare("LOCK TABLES users WRITE, sessions WRITE, relations WRITE");
             $exec->execute();
             $exec->close();
+            $this->refreshUserCache();
         }
     }
 
@@ -40,6 +42,7 @@ class Mysql implements Storage{
         if($this->getConn()->connect_error){
             die(push_response(STATUS_ERROR,"Could not create connection! Error : ".$this->getConn()->connect_error) );
         }
+        $this->refreshUserCache();
     }
 
     private function fetch_table($table_name,$to_return,$where,$end_tag = ""){
@@ -253,13 +256,23 @@ class Mysql implements Storage{
     }
     public function load_user($id=null,$username=null) : ?User{
         $res = null;
-        if($username != null){
-            $res = $this->fetch_table("users",array("*"),array("username" => $username));
-        }
         if($id != null){
+
+            if(isset($this->getUser_cache()["id"][$id])){
+                return $this->getUser_cache()["id"][$id];
+            }
+
             $res = $this->fetch_table("users",array("*"),array("id" => $id));
 
         }
+        if($username != null && $res == null){
+            if(isset($this->getUser_cache()["username"][$username])){
+                return $this->getUser_cache()["ussername"][$username];
+            }
+            $res = $this->fetch_table("users",array("*"),array("username" => $username));
+        }
+        
+        
 
         if($res != null){
             $row = $res[0];
@@ -270,6 +283,9 @@ class Mysql implements Storage{
             $user->setId($row["id"]);
             $user->setDate_of_birth($row["date_of_birth"]);
             $this->load_parents_and_children($user);
+          
+            $this->getUser_cache()["id"][$user->getId()] = $user;
+            $this->getUser_cache()["username"][$user->getUsername()] = $user;
             return $user;
         }
 
@@ -374,6 +390,10 @@ class Mysql implements Storage{
     }
 
     public function get_user_from_session(Session $session) : ?User{
+        if(isset($this->getUser_cache()["session"])){
+            return $this->getUser_cache()["session"];
+        }
+
         $id = null;
         $sql = "SELECT owner FROM sessions WHERE UuidFromBin(session)=".$this->encodetostr($session->getId())." AND pass=".$this->encodetostr($session->getKey())."";
         $res = $this->getConn()->query($sql);
@@ -382,8 +402,9 @@ class Mysql implements Storage{
 				$id = $this->decodetostr($row["owner"]);	
 			}
 
-        return $this->load_user($id);
-        
+        $user = $this->load_user($id);
+        $this->getUser_cache()["session"] = $user;
+        return $user;
     }
 
     public function delete_session(Session $session){
@@ -437,6 +458,25 @@ class Mysql implements Storage{
         }
 
     }
+
+	/**
+	 * @return array
+	 */
+	private function& getUser_cache(): array {
+		return $this->user_cache;
+	}
+	
+	/**
+	 * @param array $user_cache 
+	 * @return self
+	 */
+	private function refreshUserCache(): self {
+		$this->user_cache = array();
+        $this->user_cache["username"] = array();
+        $this->user_cache["id"] = array();
+
+		return $this;
+	}
 }
 
 ?>

@@ -108,9 +108,9 @@
                 $user->delete_parent($user2->getId());
 				$this->getStorage()->save_user($user);
 				return push_response(STATUS_OK,PARENT_UPDATED);
-            }else{
-                return push_response(STATUS_ERROR,PERMISSION_DENIED);
             }
+
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
         }else{
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
 
@@ -149,7 +149,9 @@
 
     public function browse_user_info(User $user){
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+       
         $requester = $this->getStorage()->get_user_from_session($this->getSession());
+        
         if($requester != null && $user != null){
             if($this->getStorage()->get_permission("allow_type_".$requester->getType()."_get_info_of_".$user->getType())->getAllowed()){
                 return push_response(STATUS_OK,$user->to_json());
@@ -158,6 +160,30 @@
             }
         }
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
+    }
+
+    private function is_handled(User $user, array $checked = array()) : bool{
+        $requester = $this->getStorage()->get_user_from_session($this->getSession());
+        $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+
+        if($requester != null && $user != null){
+            foreach($checked as $checked_id){
+                if($checked_id == $user->getId()){
+                    return false;
+                }
+            }
+            array_push($checked,$user->getId());
+            foreach($user->get_parents() as $parent_id){
+                if($parent_id == $requester->getId()){
+                    return true;
+                }
+                if($this->is_handled($this->getStorage()->load_user($parent_id),$checked)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
 ?>
