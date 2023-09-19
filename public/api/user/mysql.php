@@ -8,6 +8,7 @@ class Mysql implements Storage{
     //How many times we have locked, if we unlock and lock_count == 0, we unlock all!
     private $lock_count = 0;
     private array $user_cache;
+    private array $permission_cache;
 
     
     private function lock(){
@@ -18,6 +19,7 @@ class Mysql implements Storage{
             $exec->close();
         }
         $this->refreshUserCache();
+        $this->refreshPermissionCache();
 
     }
 
@@ -34,13 +36,9 @@ class Mysql implements Storage{
     }
 
     private function send_query($str){
-        try{
-                return $this->getConn()->query($str);
-        }
-        catch(Exception $e){
-            echo("DEATH!");
-            die(":(");
-        }
+        //echo("Query!");
+            return $this->getConn()->query($str);
+       
     }
 
 
@@ -63,6 +61,7 @@ class Mysql implements Storage{
     public function __construct(){
         $this->setConn(null);
         $this->refreshUserCache();
+        $this->refreshPermissionCache();
     }
 
     private function fetch_table($table_name,$to_return,$where,$end_tag = ""){
@@ -458,19 +457,30 @@ class Mysql implements Storage{
 
 
     public function get_permission($name) : Permission{
+        if(isset($this->getPermission_cache()[$name])){
+            return $this->getPermission_cache()[$name];
+        }
+
         $vals = $this->fetch_table("permissions",array("*"),array("name" => $name));
         if(count($vals) == 0){
             $permission = new Permission($name,false);
             $this->save_permission($permission);
+
+            $this->getPermission_cache()[$name] = $permission;
             return $permission;
         }else{
             $permission = new Permission($name,false);
             $permission->setAllowed($vals[0]["allowed"] == "1");
+
+            $this->getPermission_cache()[$name] = $permission;
+            
             return $permission;
         }
     }
 
     public function save_permission(Permission $permission){
+
+        
         $vals = $this->fetch_table("permissions",array("*"),array("name" => $permission->getName()));
         if(count($vals) == 0){
             $this->insert_table("permissions", array("name" => $permission->getName(), "allowed" => $permission->getAllowed() ? "1" : "0"));
@@ -478,6 +488,8 @@ class Mysql implements Storage{
         }else{
             $this->save_table("permissions",array("allowed" => $permission->getAllowed() ? "1" : "0" ) ,array("name" => $permission->getName()));
         }
+        $this->getPermission_cache()[$permission->getName()] = $permission;
+
 
     }
 
@@ -486,6 +498,10 @@ class Mysql implements Storage{
 	 */
 	private function& getUser_cache(): array {
 		return $this->user_cache;
+	}
+
+    private function& getPermission_cache(): array {
+		return $this->permission_cache;
 	}
 	
 	/**
@@ -496,6 +512,12 @@ class Mysql implements Storage{
 		$this->user_cache = array();
         $this->user_cache["username"] = array();
         $this->user_cache["id"] = array();
+
+		return $this;
+	}
+
+    private function refreshPermissionCache(): self {
+		$this->permission_cache = array();
 
 		return $this;
 	}
