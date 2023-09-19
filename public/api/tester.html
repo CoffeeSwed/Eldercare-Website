@@ -1,0 +1,305 @@
+<html>
+    <head>
+        <style>
+             form{
+                border-color: black;
+                border-style: solid;
+                width: 400px;
+            }
+            pre {
+                background-color: ghostwhite;
+                border: 1px solid silver;
+                padding: 10px 20px;
+                margin: 20px;
+                border-radius: 4px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>
+                <form name="create_user" id="create_user" method="post" action="./index.php">
+                    <label for="username">username:</label><br>
+                    <input type="text" id="username" name="username" value=""><br>
+                    <label for="password">password:</label><br>
+                    <input type="text" id="password" name="password" value=""><br>
+
+                    <label for="first_name">First name:</label><br>
+                    <input type="text" id="first_name" name="first_name" value=""><br>
+                    <label for="last_name">Last name:</label><br>
+                    <input type="text" id="last_name" name="last_name" value=""><br>
+
+                    <label for="email">Email:</label><br>
+                    <input type="text" id="email" name="email" value=""><br>
+
+                    <label for="contact_number">Contact number:</label><br>
+                    <input type="text" id="contact_number" name="contact_number" value=""><br>
+
+                    <label for="date_of_birth">Date of birth (year-month-day):</label><br>
+                    <input type="text" id="date_of_birth" name="date_of_birth" value=""><br>
+
+                    <label for="address_country">Country:</label><br>
+                    <input type="text" id="address_country" name="address_country" value=""><br>
+
+                    <label for="address_city">City:</label><br>
+                    <input type="text" id="address_city" name="address_city" value=""><br>
+
+                    <label for="address_postcode">Post code:</label><br>
+                    <input type="text" id="address_postcode" name="address_postcode" value=""><br>
+
+                    <label for="address_street_and_house">Street name and number:</label><br>
+                    <input type="text" id="address_street_and_house" name="address_street_and_house" value=""><br>
+
+                    <label for="preferences">Preferences:</label><br>
+                    <input type="text" id="preferences" name="preferences" value=""><br>
+
+                    <p>Type</p>
+                    <input type="radio" id="Guest" name="type" value="Guest">
+                    <label for="Guest">Guest</label><br>
+                    <input type="radio" id="Patient" name="type" value="Patient">
+                    <label for="Patient">Patient</label><br>
+                    <input type="radio" id="Caregiver" name="type" value="Caregiver">
+                    <label for="Caregiver">Caregiver</label><br>
+                    <input type="radio" id="Administrator" name="type" value="Administrator">
+                    <label for="Administrator">Administrator</label><br>
+
+                    
+
+                    <label for="session">Session:</label><br>
+                    <input type="text" id="session" name="session" value=""><br>
+                    <label for="key">Key:</label><br>
+                    <input type="text" id="key" name="key" value=""><br>
+                    
+                    <input type="hidden" id="action" name="action" value="create_user">
+                    <input type="submit" id="create_user_button" value="Create user">
+                </form>
+                </th>
+                
+                <th>
+                    <form name="get_website_config" id="get_website_config" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="get_website_config">
+                        <input type="submit" value="Get website config">
+                    </form>
+
+                    <form name="add_parent" id="add_parent" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="parent_username">parent username:</label><br>
+                        <input type="text" id="parent_username" name="parent_username" value=""><br>
+                        <label for="parent_id">parent id:</label><br>
+                        <input type="text" id="parent_id" name="parent_id" value=""><br>
+
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="add_parent">
+                        <input type="submit" value="Add parent">
+                    </form>
+
+                    <form name="remove_parent" id="remove_parent" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="parent_username">parent username:</label><br>
+                        <input type="text" id="parent_username" name="parent_username" value=""><br>
+                        <label for="parent_id">parent id:</label><br>
+                        <input type="text" id="parent_id" name="parent_id" value=""><br>
+
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="delete_parent">
+                        <input type="submit" value="Remove parent">
+                    </form>
+                </th>
+                <th>
+
+                    <form name="delete_user" id="delete_user" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="delete_user">
+                        <input type="submit" value="Delete user">
+                    </form>
+
+                    <form name="get_user_info" id="get_user_info" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="get_user_info">
+                        <input type="submit" value="Get user info">
+                    </form>
+
+                    <form name="get_children" id="get_children" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="get_children">
+                        <input type="submit" value="Get children">
+                    </form>
+                    
+                </th>
+
+                <th>
+                    <form name="is_valid_session" id="is_valid_session" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+    
+    
+                        <input type="hidden" id="action" name="action" value="is_valid_session">
+                        <input type="submit" value="Get is valid session">
+                    </form>
+
+                    <form name="unit_test" id="unit_test" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+    
+    
+                        <input type="hidden" id="action" name="action" value="unit_test">
+                        <input type="submit" value="Do unit test (not fully implemented)">
+                    </form>
+                    <form name="create_session" id="create_session" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="password">password:</label><br>
+                        <input type="text" id="password" name="password" value=""><br>
+    
+    
+                        <input type="hidden" id="action" name="action" value="create_session">
+                        <input type="submit" value="Create session">
+                    </form>
+    
+    
+                    <form name="get_session_user_info" id="get_session_user_info" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+    
+    
+                        <input type="hidden" id="action" name="action" value="get_session_user_info">
+                        <input type="submit" value="Get session user info">
+                    </form>
+                </th>
+                
+                <th>
+                </th>
+            </tr>
+        </table>
+        <br>
+        <pre><code id="response"></code></pre>
+
+    </body>
+    <script>
+
+Object.prototype.prettyPrint = function(){
+    var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+    var replacer = function(match, pIndent, pKey, pVal, pEnd) {
+        var key = '<span class="json-key" style="color: brown">',
+            val = '<span class="json-value" style="color: navy">',
+            str = '<span class="json-string" style="color: olive">',
+            r = pIndent || '';
+        if (pKey)
+            r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+        if (pVal)
+            r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
+        return r + (pEnd || '');
+    };
+
+    return JSON.stringify(this, null, 3)
+               .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+               .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+               .replace(jsonLine, replacer);
+}
+
+        function formSubmit(event) {
+            var url = "./index.php";
+            var request = new XMLHttpRequest();
+            request.open('POST', url, true);
+            request.onload = function() { // request successful
+        // we can use server response to our request now
+            try{
+            var js = JSON.parse(request.responseText);
+            document.getElementById("response").innerHTML=js.prettyPrint();
+            if(js["Data"]["session"] != null){
+                document.getElementsByName("session").forEach(element => {
+                    if(element.id="session"){
+                        element.value = js["Data"]["session"];
+                    }
+                });
+                document.getElementsByName("key").forEach(element => {
+                    if(element.id="key"){
+                        element.value = js["Data"]["key"];
+                    }
+                });
+            }
+        }
+        catch(e){
+            document.getElementById("response").innerHTML=request.responseText;
+        }
+        };
+
+        request.onerror = function() {
+            // request failed
+        };
+
+            request.send(new FormData(event.target)); // create FormData from form that triggered event
+            event.preventDefault();
+        }
+
+        // and you can attach form submit event like this for example
+        function attachFormSubmitEvent(formId){
+         document.getElementById(formId).addEventListener("submit", formSubmit);
+        }
+        
+        attachFormSubmitEvent("create_user");
+        attachFormSubmitEvent("create_session");
+        attachFormSubmitEvent("get_session_user_info");
+        attachFormSubmitEvent("get_website_config");
+        attachFormSubmitEvent("add_parent");
+        attachFormSubmitEvent("remove_parent");
+
+        attachFormSubmitEvent("delete_user");
+        attachFormSubmitEvent("get_user_info");
+        attachFormSubmitEvent("get_children");
+        attachFormSubmitEvent("is_valid_session");
+        attachFormSubmitEvent("unit_test");
+
+
+
+        
+    </script>
+</html>
