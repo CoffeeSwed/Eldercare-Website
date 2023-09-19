@@ -51,6 +51,8 @@
 
 
     public function create_user(User $user){
+        $this->getStorage()->cache_flush();
+
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         if(!$this->getStorage()->exist_user($user)){
             if($this->getStorage()->get_permission("allow_type_".($creator != null ? $creator->getType() : "Unsigned")."_create_".$user->getType())->getAllowed()){
@@ -82,6 +84,9 @@
     }
     
     public function add_parent(User $user,User $user2){
+        $this->getStorage()->cache_flush();
+
+
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
@@ -100,6 +105,8 @@
     }
 
     public function delete_parent(User $user,User $user2){
+        $this->getStorage()->cache_flush();
+
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
@@ -154,7 +161,9 @@
         
         if($requester != null && $user != null){
             if($this->getStorage()->get_permission("allow_type_".$requester->getType()."_get_info_of_".$user->getType())->getAllowed()){
-                return push_response(STATUS_OK,$user->to_json());
+                $p = $user->to_json();
+                $p["handled"] = $this->is_handled(($user)) ? "True" : False;
+                return push_response(STATUS_OK,$p);
             }else{
                 return push_response(STATUS_ERROR,PERMISSION_DENIED);
             }

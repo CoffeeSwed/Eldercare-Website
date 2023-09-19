@@ -18,8 +18,7 @@ class Mysql implements Storage{
             $exec->execute();
             $exec->close();
         }
-        $this->refreshUserCache();
-        $this->refreshPermissionCache();
+        $this->cache_flush();
 
     }
 
@@ -33,6 +32,8 @@ class Mysql implements Storage{
         if($this->getLock_count() < 0){
             $this->setLock_count(0);
         }
+        $this->cache_flush();
+
     }
 
     private function send_query($str){
@@ -60,8 +61,7 @@ class Mysql implements Storage{
 
     public function __construct(){
         $this->setConn(null);
-        $this->refreshUserCache();
-        $this->refreshPermissionCache();
+        $this->cache_flush();
     }
 
     private function fetch_table($table_name,$to_return,$where,$end_tag = ""){
@@ -301,9 +301,12 @@ class Mysql implements Storage{
             $user->setId($row["id"]);
             $user->setDate_of_birth($row["date_of_birth"]);
             $this->load_parents_and_children($user);
-          
+            
             $this->getUser_cache()["id"][$user->getId()] = $user;
             $this->getUser_cache()["username"][$user->getUsername()] = $user;
+            
+            //echo("Loaded : ".$user->getUsername() . " children : ");
+            //print_r($user->get_children());
             return $user;
         }
 
@@ -521,6 +524,11 @@ class Mysql implements Storage{
 
 		return $this;
 	}
+
+    public function cache_flush(){
+        $this->refreshPermissionCache();
+        $this->refreshUserCache();
+    }
 }
 
 ?>

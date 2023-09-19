@@ -31,5 +31,7 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function close();
         
         public function open();
+
+        public function cache_flush();
     }
 ?>
