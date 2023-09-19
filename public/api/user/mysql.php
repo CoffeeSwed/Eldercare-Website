@@ -16,8 +16,9 @@ class Mysql implements Storage{
             $exec = $this->getConn()->prepare("LOCK TABLES users WRITE, sessions WRITE, relations WRITE");
             $exec->execute();
             $exec->close();
-            $this->refreshUserCache();
         }
+        $this->refreshUserCache();
+
     }
 
     private function unlock(){
