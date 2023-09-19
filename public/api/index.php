@@ -5,7 +5,8 @@
 	include_once("./user/user.php");
 	include_once("./user/mysql.php");
 	include_once("api.php");
-
+	// Start the session
+	session_start();
 	
 
 
@@ -142,6 +143,9 @@
 	}
 	
 	function answer_requests(){
+		
+		
+
 		$session = new Session(null);
 		$session->setKey(get_argument("key"));
 		$session->setId(get_argument("session"));
@@ -152,7 +156,15 @@
 		$user->setContact_number(get_argument("contact_number"));
 		$user->setId(get_argument("id") == "" ? null : get_argument("id"));
 		$user->setDate_of_birth(get_argument(("date_of_birth")));
-		$api = new API(new Mysql(),$session);
+		if(!isset($_SESSION["api"])){
+			$api = new API(new Mysql(),$session);
+			$_SESSION["api"] = $api;
+		}else{
+			$api = $_SESSION["api"];
+			$api->setSession($session);
+			$api->getStorage()->open();
+		}
+		
 
 
 		if(get_argument(ACTION) == UNIT_TEST){
@@ -194,6 +206,7 @@
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}
 
+		$api->getStorage()->close();
 	}
 	answer_requests();
 	

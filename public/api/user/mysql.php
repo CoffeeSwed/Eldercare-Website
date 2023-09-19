@@ -32,16 +32,35 @@ class Mysql implements Storage{
         }
     }
 
+    private function send_query($str){
+        try{
+                return $this->getConn()->query($str);
+        }
+        catch(Exception $e){
+            echo("DEATH!");
+            die(":(");
+        }
+    }
+
 
 
 
     private $conn;
     
-    public function __construct(){
-        $this->setConn(new mysqli(get_cfg_val("db_ip"),get_cfg_val("db_user"),get_cfg_val("db_password"),get_cfg_val("db_name")));
-        if($this->getConn()->connect_error){
-            die(push_response(STATUS_ERROR,"Could not create connection! Error : ".$this->getConn()->connect_error) );
+    public function open(){
+        $this->setConn(null);
+
+    }
+
+    public function close(){
+        if($this->getConn(false) != null){
+            $this->getConn()->close();
+            $this->setConn(null);
         }
+    }
+
+    public function __construct(){
+        $this->setConn(null);
         $this->refreshUserCache();
     }
 
@@ -69,7 +88,7 @@ class Mysql implements Storage{
         }
         
 
-        $res = $this->getConn()->query($query);
+        $res = $this->send_query($query);
         if($res->num_rows > 0){
             while($row = $res->fetch_assoc()){
                 foreach(array_keys($row) as $key){
@@ -104,7 +123,7 @@ class Mysql implements Storage{
         }
 
         $sql = $sql.")";
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         
     }
@@ -127,7 +146,7 @@ class Mysql implements Storage{
 
             }
         }
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
     }
 
     /**
@@ -149,7 +168,6 @@ class Mysql implements Storage{
         $this->lock();
         if($user->getId() != null && $this->load_user($user->getId()) != null){
             
-            //$this->getConn()->query($sql);
 
             $this->save_table("users",$this->create_save_insert_array($user),array("id" => $user->getId()));
             
@@ -197,7 +215,7 @@ class Mysql implements Storage{
 
         $sql = "DELETE FROM relations WHERE person_2=".$this->encodetostr($user->getId());
 
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         $this->unlock();
     }
@@ -206,11 +224,11 @@ class Mysql implements Storage{
         $this->lock();
         $sql = "DELETE FROM relations WHERE person_1=".$this->encodetostr($user->getId());
 
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         $sql = "DELETE FROM relations WHERE person_2=".$this->encodetostr($user->getId());
 
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         $this->unlock();
     }
@@ -220,7 +238,7 @@ class Mysql implements Storage{
 
         $sql = "DELETE FROM sessions WHERE owner=".$this->encodetostr($user->getId());
 
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         $this->unlock();
     }
@@ -232,7 +250,7 @@ class Mysql implements Storage{
             $sql = "DELETE FROM users WHERE id=".$this->encodetostr($user->getId());
             $this->lock();
 
-            $this->getConn()->query($sql);
+            $this->send_query($sql);
             
             $this->delete_all_relations($user);
 
@@ -267,7 +285,7 @@ class Mysql implements Storage{
         }
         if($username != null && $res == null){
             if(isset($this->getUser_cache()["username"][$username])){
-                return $this->getUser_cache()["ussername"][$username];
+                return $this->getUser_cache()["username"][$username];
             }
             $res = $this->fetch_table("users",array("*"),array("username" => $username));
         }
@@ -325,7 +343,10 @@ class Mysql implements Storage{
 	/**
 	 * @return mixed
 	 */
-	private function getConn() : mysqli {
+	private function getConn($create_if_null = true) : ?mysqli {
+        if($this->conn == null && $create_if_null){
+            $this->setConn(new mysqli("p:".get_cfg_val("db_ip"),get_cfg_val("db_user"),get_cfg_val("db_password"),get_cfg_val("db_name")));
+        }
 		return $this->conn;
 	}
 	
@@ -372,12 +393,12 @@ class Mysql implements Storage{
     public function insert_session(Session $session){
         $this->lock();
         $sql = "INSERT INTO sessions(session,pass,owner) VALUES(UuidToBin(UUID()), ".$this->encodetostr($session->getKey()).", ".$this->encodetostr($session->getOwner_id()).")";
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
 
         
 
         $sql = "SELECT UuidFromBin(session),pass FROM sessions WHERE id='".$this->getConn()->insert_id."'";
-        $res = $this->getConn()->query($sql);
+        $res = $this->send_query($sql);
 				if($res->num_rows == 1){
 					
 					$row = $res->fetch_assoc();
@@ -396,7 +417,7 @@ class Mysql implements Storage{
 
         $id = null;
         $sql = "SELECT owner FROM sessions WHERE UuidFromBin(session)=".$this->encodetostr($session->getId())." AND pass=".$this->encodetostr($session->getKey())."";
-        $res = $this->getConn()->query($sql);
+        $res = $this->send_query($sql);
 			if($res->num_rows > 0){
 				$row = $res->fetch_assoc();
 				$id = $this->decodetostr($row["owner"]);	
@@ -410,7 +431,7 @@ class Mysql implements Storage{
     public function delete_session(Session $session){
         $this->lock();
         $sql = "DELETE FROM sessions WHERE UuidFromBin(session)=".$this->encodetostr($session->getId())." AND pass=".$this->encodetostr($session->getKey())."";
-        $this->getConn()->query($sql);
+        $this->send_query($sql);
         $this->unlock();
     }
 

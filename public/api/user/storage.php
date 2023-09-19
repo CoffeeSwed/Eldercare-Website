@@ -25,5 +25,11 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function get_permission($name) : Permission;
 
         public function save_permission(Permission $permission);
+
+
+
+        public function close();
+        
+        public function open();
     }
 ?>

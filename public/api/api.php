@@ -141,9 +141,9 @@
     public function get_session_user_info(){
         $user = $this->getStorage()->get_user_from_session($this->getSession());
         if($user != null){
-
             return push_response(STATUS_OK,$user->to_json());
         }
+
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
 
