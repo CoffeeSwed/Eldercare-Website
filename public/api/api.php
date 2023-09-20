@@ -55,7 +55,7 @@
 
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         if(!$this->getStorage()->exist_user($user)){
-            if($this->getStorage()->get_permission("allow_type_".($creator != null ? $creator->getType() : "Unsigned")."_create_".$user->getType())->getAllowed()){
+            if($this->has_permission("create",$user)){
                 $this->getStorage()->save_user($user);
                 return push_response(STATUS_OK,CREATED_USER);
             }else{
@@ -71,7 +71,7 @@
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
         if($user != null){
-            if($this->getStorage()->get_permission("allow_type_".$creator->getType()."_delete_".$user->getType())->getAllowed()){
+            if($this->has_permission("delete",$user)){
                 $this->getStorage()->delete_user($user);
                 return push_response(STATUS_OK,DELETED_USER);
             }else{
@@ -91,13 +91,13 @@
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
         if($user != null && $user2 != null && $creator != null){
-            if($this->getStorage()->get_permission("allow_type_".$creator->getType()."_add_parent_to_".$user->getType())->getAllowed()){
-                $user->add_parent($user2->getId());
-				$this->getStorage()->save_user($user);
-				return push_response(STATUS_OK,PARENT_UPDATED);
-            }else{
+                if($this->has_permission("add_parent_to",$user))
                 return push_response(STATUS_ERROR,PERMISSION_DENIED);
-            }
+            
+                 $user->add_parent($user2->getId());
+                 $this->getStorage()->save_user($user);
+                 return push_response(STATUS_OK,PARENT_UPDATED);
+
         }else{
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
 
@@ -111,13 +111,17 @@
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
         if($user != null && $user2 != null && $creator != null){
-            if($this->getStorage()->get_permission("allow_type_".$creator->getType()."_delete_parent_to_".$user->getType())->getAllowed()){
-                $user->delete_parent($user2->getId());
-				$this->getStorage()->save_user($user);
-				return push_response(STATUS_OK,PARENT_UPDATED);
-            }
 
+            
+            if($this->has_permission("delete_parent_to",$user))
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
+
+            
+            $user->delete_parent($user2->getId());
+            $this->getStorage()->save_user($user);
+
+            return push_response(STATUS_OK,PARENT_UPDATED);
+
         }else{
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
 
@@ -160,7 +164,7 @@
         $requester = $this->getStorage()->get_user_from_session($this->getSession());
         
         if($requester != null && $user != null){
-            if($this->getStorage()->get_permission("allow_type_".$requester->getType()."_get_info_of_".$user->getType())->getAllowed()){
+            if($this->has_permission("browse_info_of",$user)){
                 $p = $user->to_json();
                 $p["handled"] = $this->is_handled(($user)) ? "True" : False;
                 return push_response(STATUS_OK,$p);
@@ -189,6 +193,35 @@
                 if($this->is_handled($this->getStorage()->load_user($parent_id),$checked)){
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    private function has_permission(string $name, User $user){
+        $creator = $this->getStorage()->get_user_from_session($this->getSession());
+        $creator_type = $creator == null ? "null" : $creator->getType();
+
+        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_all")->getAllowed()){
+                
+            return true;
+        }
+
+        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_".$user->getType())->getAllowed()){
+            
+            return true;
+        }
+
+        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_all")->getAllowed()){
+            if($this->is_handled($creator)){
+                return true;
+            }
+        }
+
+        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_".$user->getType())->getAllowed()){
+            if($this->is_handled($creator)){
+                return true;
             }
         }
 

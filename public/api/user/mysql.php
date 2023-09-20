@@ -467,7 +467,7 @@ class Mysql implements Storage{
         $vals = $this->fetch_table("permissions",array("*"),array("name" => $name));
         if(count($vals) == 0){
             $permission = new Permission($name,false);
-            $this->save_permission($permission);
+            //$this->save_permission($permission);
 
             $this->getPermission_cache()[$name] = $permission;
             return $permission;
