@@ -1,6 +1,8 @@
 <?php
-include_once("user.php");
+include_once("./user/user.php");
 include_once("permission.php");
+include_once("./meals/dinners.php");
+include_once("./meals/meal_types/meal_type.php");
 
 define("USER_ALREADY_EXIST","USER_ALREADY_EXIST");
 define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
@@ -33,5 +35,9 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function open();
 
         public function cache_flush();
+
+        public function load_dinners() : array;
+
+        public function load_meal_types() : array;
     }
 ?>

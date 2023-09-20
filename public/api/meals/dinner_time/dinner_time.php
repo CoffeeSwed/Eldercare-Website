@@ -1,7 +1,7 @@
 <?php
 include_once("./essentials.php");
 
-class dinner_time{
+class Dinner_Time{
     private $id;
 
     private $swedish_name;
@@ -10,8 +10,10 @@ class dinner_time{
 
     private $when;
 
-    public function __construct(){
-        
+    public function __construct($swedish_name = null, $english_name = null, $when = null){
+        $this->setSwedish_name($swedish_name);
+		$this->setEnglish_name($english_name);
+		$this->setWhen($when);
     }
     
 
@@ -77,6 +79,15 @@ class dinner_time{
 	public function setWhen($when): self {
 		$this->when = $when;
 		return $this;
+	}
+
+	public function to_array() : array{
+		$arr = array();
+		$arr["id"] = $this->getId();
+		$arr["swedish_name"] = $this->getSwedish_name();
+		$arr["english_name"] = $this->getEnglish_name();
+		$arr["when"] = $this->getWhen();
+		return $arr;
 	}
 }
 ?>

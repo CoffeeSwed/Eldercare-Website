@@ -1,12 +1,16 @@
 <?php
 	include_once("essentials.php");
 	include_once("response.php");
-	include_once("unit_test.php");
 	include_once("./user/user.php");
-	include_once("./user/mysql.php");
-	include_once("api.php");
+	include_once("./storage/mysql.php");
+	include_once("./api/api.php");
+	include_once("./unit_tests/tests/mysql.php");
+	include_once("./unit_tests/tests/meals.php");
+
+
 	// Start the session
 	session_start();
+	
 	
 
 
@@ -21,12 +25,13 @@
 		
 
 			$results = array();
-
-			$results["user/user.php"] = unit_test_try_out_users();
-			$results["user/mysql.php"] = unit_test_try_out_mysql();
-			$results["user/dinners.php"] = unit_test_try_out_dinners();
-
 			
+
+
+			$mysql = new Unit_Test_Mysql();
+			$results[$mysql->getName()] = $mysql->to_array();
+			$meals = new Unit_Test_Meals();
+			$results[$meals->getName()] = $meals->to_array();
 
 
 			

@@ -529,6 +529,32 @@ class Mysql implements Storage{
         $this->refreshPermissionCache();
         $this->refreshUserCache();
     }
+
+    public function load_dinners() : array{
+        $arr = array();
+        
+        $res = $this->fetch_table("dinner_times",array("id", "swedish_name", "english_name","at"),array("*"));
+
+        foreach($res as $row){
+            $dinner = new Dinner_Time($row["swedish_name"],$row["english_name"],$row["at"]);
+            $dinner->setId(intval($row["id"]));
+            array_push($arr,$dinner);
+        }
+
+        return $arr;
+    }
+
+    public function load_meal_types() : array{
+        $arr = array();
+        $res = $this->fetch_table("meal_types",array("id", "swedish_name", "english_name","available_at"),array("*"));
+        foreach($res as $row){
+            $meal = new Meal_Type($row["swedish_name"],$row["english_name"]);
+            $meal->setId(intval($row["id"]));
+            $meal->setAvailable_at(json_decode($row["available_at"]));
+            array_push($arr,$meal);
+        }
+        return $arr;
+    }
 }
 
 ?>
