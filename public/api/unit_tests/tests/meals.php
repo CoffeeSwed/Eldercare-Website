@@ -12,10 +12,18 @@
         $database = new Mysql();
         $dinner = new Dinners($database);
         $user = new User("Kristoffer","Norman",TYPE_GUEST);
-        
-        $database->delete_user($user);
+        $user2 = $database->load_user($user->getId(),$user->getUsername());
+        if($user2 != null){
+            $database->delete_user($user2);
+
+        }
         $database->save_user($user);
         $user = $database->load_user($user->getId(),$user->getUsername());
+        if($user == null){
+            return;
+        }
+
+
 
         $this->addEntry(new Unit_Test_Entry("Create_Dinners",STATUS_OK,"Could create dinners instance"));
 

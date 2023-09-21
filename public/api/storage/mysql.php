@@ -16,9 +16,8 @@ class Mysql implements Storage{
     private function lock(){
         $this->setLock_count($this->getLock_count() + 1);
         if($this->getLock_count() == 1){
-            $exec = $this->getConn()->prepare("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE");
-            $exec->execute();
-            $exec->close();
+            $this->send_query("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE");
+            
         }
         $this->cache_flush();
 
@@ -27,9 +26,8 @@ class Mysql implements Storage{
     private function unlock(){
         $this->setLock_count($this->getLock_count() - 1);
         if($this->getLock_count() == 0){
-            $exec = $this->getConn()->prepare("UNLOCK TABLES");
-            $exec->execute();
-            $exec->close();
+            $exec = $this->send_query("UNLOCK TABLES");
+      
         }
         if($this->getLock_count() < 0){
             $this->setLock_count(0);
@@ -38,10 +36,19 @@ class Mysql implements Storage{
 
     }
 
-    private function send_query($str){
+    private function send_query($str,$multi_query = false){
         //echo("Query!");
+        try{
+            if(!$multi_query)
             return $this->getConn()->query($str);
-       
+            else
+            return $this->getConn()->multi_query($str);
+
+        }
+        catch(Exception $e){
+            $this->close();
+            throw $e;
+        }
     }
 
 
@@ -50,15 +57,22 @@ class Mysql implements Storage{
     private $conn;
     
     public function open(){
+        if($this->getConn(false) != null){
+            $this->close();
+        }
         $this->setConn(null);
 
     }
 
     public function close(){
         if($this->getConn(false) != null){
-            $this->getConn()->close();
+            mysqli_close($this->getConn());
             $this->setConn(null);
         }
+    }
+
+    public function __destruct(){
+        $this->close();
     }
 
     public function __construct(){
@@ -249,13 +263,17 @@ class Mysql implements Storage{
 
     public function delete_user(?User $user){
         if($user != null){
-            $sql = "DELETE FROM users WHERE id=".$this->encodetostr($user->getId());
             $this->lock();
-            $this->send_query($sql);
 
-            $sql = "DELETE FROM meal_plan_entry WHERE owner=".$this->encodetostr($user->getId());
+            $id = $user->getId();
+            
+            $sql = "DELETE FROM users WHERE id=".$this->encodetostr($id);
+            
+            $this->send_query($sql,false);
 
-            $this->send_query($sql);
+            $sql = "DELETE FROM meal_plan_entry WHERE owner=".$this->encodetostr($id);
+
+            $this->send_query($sql,false);
             
             $this->delete_all_relations($user);
 
@@ -568,22 +586,28 @@ class Mysql implements Storage{
 
     public function save_meal_plan_entry(Meal_Plan_Entry& $meal_plan_entry){
         $this->lock();  
-        
-        if($meal_plan_entry->getId() == null){
-            $p = $this->load_meal_plan_entry($meal_plan_entry->getOwnerID(),$meal_plan_entry->getDimmer_time(),$meal_plan_entry->getDay());
-            if($p != null){
-                $meal_plan_entry->setId($p->getId());
-            }
-        }
+        $user = $this->load_user($meal_plan_entry->getOwnerID());
+        if($user == null){
 
-        if($meal_plan_entry->getId() == null){
-
-
-            $this->insert_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry));
-            $meal_plan_entry->setId($this->getConn()->insert_id);
-        }else{
-            $this->save_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry), array("id" => $meal_plan_entry->getId()));
+            }else{
             
+            
+            if($meal_plan_entry->getId() == null){
+                $p = $this->load_meal_plan_entry($meal_plan_entry->getOwnerID(),$meal_plan_entry->getDimmer_time(),$meal_plan_entry->getDay());
+                if($p != null){
+                    $meal_plan_entry->setId($p->getId());
+                }
+            }
+
+            if($meal_plan_entry->getId() == null){
+
+                
+                $this->insert_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry));
+                $meal_plan_entry->setId($this->getConn()->insert_id);
+            }else{
+                $this->save_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry), array("id" => $meal_plan_entry->getId()));
+                
+            }
         }
 
         $this->unlock();

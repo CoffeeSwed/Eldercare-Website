@@ -183,7 +183,9 @@
     private function is_handled(User $user, array $checked = array()) : bool{
         $requester = $this->getStorage()->get_user_from_session($this->getSession());
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
-
+        if($requester->getId() == $user->getId()){
+            return false;
+        }
         if($requester != null && $user != null){
             foreach($checked as $checked_id){
                 if($checked_id == $user->getId()){

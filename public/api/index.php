@@ -9,7 +9,6 @@
 
 
 	// Start the session
-	session_start();
 	
 	
 
@@ -161,14 +160,11 @@
 		$user->setContact_number(get_argument("contact_number"));
 		$user->setId(get_argument("id") == "" ? null : get_argument("id"));
 		$user->setDate_of_birth(get_argument(("date_of_birth")));
-		if(!isset($_SESSION["api"])){
-			$api = new API(new Mysql(),$session);
-			$_SESSION["api"] = $api;
-		}else{
-			$api = $_SESSION["api"];
-			$api->setSession($session);
-			$api->getStorage()->open();
-		}
+		
+		$api = new API(new Mysql(),$session);
+		$api->setSession($session);
+		$api->getStorage()->open();
+		
 		
 
 
