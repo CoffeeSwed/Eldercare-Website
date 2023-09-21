@@ -14,7 +14,7 @@ class Mysql implements Storage{
     private function lock(){
         $this->setLock_count($this->getLock_count() + 1);
         if($this->getLock_count() == 1){
-            $exec = $this->getConn()->prepare("LOCK TABLES users WRITE, sessions WRITE, relations WRITE");
+            $exec = $this->getConn()->prepare("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE");
             $exec->execute();
             $exec->close();
         }
@@ -163,7 +163,7 @@ class Mysql implements Storage{
      );
      }
 
-    public function save_user(User $user){
+    public function save_user(User& $user){
        
         $this->lock();
         if($user->getId() != null && $this->load_user($user->getId()) != null){
@@ -322,7 +322,7 @@ class Mysql implements Storage{
         return false;
     }
 
-    private function insert_user(User $user){
+    private function insert_user(User& $user){
         if($user->getId() == null){
             $this->lock();
             if($this->exist_user($user)){
@@ -467,7 +467,7 @@ class Mysql implements Storage{
         $vals = $this->fetch_table("permissions",array("*"),array("name" => $name));
         if(count($vals) == 0){
             $permission = new Permission($name,false);
-            //$this->save_permission($permission);
+            $this->save_permission($permission);
 
             $this->getPermission_cache()[$name] = $permission;
             return $permission;
@@ -537,7 +537,7 @@ class Mysql implements Storage{
 
         foreach($res as $row){
             $dinner = new Dinner_Time($row["swedish_name"],$row["english_name"],$row["at"]);
-            $dinner->setId(intval($row["id"]));
+            $dinner->setId($row["id"]);
             array_push($arr,$dinner);
         }
 
@@ -549,11 +549,51 @@ class Mysql implements Storage{
         $res = $this->fetch_table("meal_types",array("id", "swedish_name", "english_name","available_at"),array("*"));
         foreach($res as $row){
             $meal = new Meal_Type($row["swedish_name"],$row["english_name"]);
-            $meal->setId(intval($row["id"]));
+            $meal->setId($row["id"]);
             $meal->setAvailable_at(json_decode($row["available_at"]));
             array_push($arr,$meal);
         }
         return $arr;
+    }
+    
+    private function create_insert_array_for_meal_plan_entry(Meal_Plan_Entry $meal_plan_entry){
+        return array("has_eaten" => ($meal_plan_entry->getHas_eaten() ? "1" : "0"), "owner" => $meal_plan_entry->getOwnerID(), "at" => $meal_plan_entry->getDimmer_time(), "date" => $meal_plan_entry->getDay(), "meal_types" => json_encode($meal_plan_entry->getMeal_types()));
+    }
+
+    public function save_meal_plan_entry(Meal_Plan_Entry& $meal_plan_entry){
+        $this->lock();  
+        
+        if($meal_plan_entry->getId() == null){
+            $p = $this->load_meal_plan_entry($meal_plan_entry->getOwnerID(),$meal_plan_entry->getDimmer_time(),$meal_plan_entry->getDay());
+            if($p != null){
+                $meal_plan_entry->setId($p->getId());
+            }
+        }
+
+        if($meal_plan_entry->getId() == null){
+
+
+            $this->insert_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry));
+            $meal_plan_entry->setId($this->getConn()->insert_id);
+        }else{
+            $this->save_table("meal_plan_entry",$this->create_insert_array_for_meal_plan_entry($meal_plan_entry), array("id" => $meal_plan_entry->getId()));
+            
+        }
+
+        $this->unlock();
+    }
+
+    public function load_meal_plan_entry($owner_id, $dinner_time_id,$date) : ?Meal_Plan_Entry{
+
+        $meal_plan = null;
+        $res = $this->fetch_table("meal_plan_entry",array("*"),array("owner" => $owner_id, "at" => $dinner_time_id, "date" => $date));
+        if(count($res) != 0){
+            $row = $res[0];
+            $meal_plan = new Meal_Plan_Entry($row["at"],json_decode($row["meal_types"]),$row["owner"],$row["date"]);
+            $meal_plan->setId($row["id"]);
+            $meal_plan->setHas_eaten(intval($row["has_eaten"]));
+        }
+        return $meal_plan;
     }
 }
 

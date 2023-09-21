@@ -168,6 +168,7 @@
 			$api = $_SESSION["api"];
 			$api->setSession($session);
 			$api->getStorage()->open();
+			$api->setDinnersInstance(new Dinners($api->getStorage()));
 		}
 		
 
@@ -205,6 +206,10 @@
 		if(get_argument(ACTION) == DELETE_USER){
 			echo($api->delete_user($user));
 
+		}
+
+		if(get_argument(ACTION) == GET_MEAL_PLAN){
+			echo($api->get_meal_plan($user,get_argument("date")));
 		}
 
 		if(get_argument(ACTION) == ""){

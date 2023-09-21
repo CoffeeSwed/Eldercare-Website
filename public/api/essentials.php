@@ -30,6 +30,8 @@
 	define("CREATE_SESSION","create_session");
 	define("ADD_PARENT","add_parent");
 	define("DELETE_PARENT","delete_parent");
+	define("GET_MEAL_PLAN","get_meal_plan");
+
 
 	define("IS_VALID_SESSION","is_valid_session");
 	define("GET_SESSION_USER_INFO","get_session_user_info");

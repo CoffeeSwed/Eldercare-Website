@@ -19,6 +19,7 @@
 		return $this->available_at;
 	}
 	
+	
 	/**
 	 * @param mixed $available_at 
 	 * @return self

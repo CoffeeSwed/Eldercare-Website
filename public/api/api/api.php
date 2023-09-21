@@ -5,12 +5,15 @@
     include_once("./user/user.php");
     include_once("./storage/mysql.php");
     include_once("./user/session.php");
+    include_once(__DIR__."/../meals/dinners.php");
 
 
     class API{
         private Session $session;
 
         private Storage $storage;
+
+        private Dinners $dinner;
     
 	/**
 	 * @return Session
@@ -29,6 +32,8 @@
 	}
 
     public function __construct(Storage $storage, Session $session){
+        $this->setDinnersInstance(new Dinners($storage));
+
         $this->setStorage($storage);
         $this->setSession($session);
     }
@@ -227,5 +232,41 @@
 
         return false;
     }
+
+    public function get_meal_plan(User $user, ?string $date){
+        if($date == "")
+            $date = null;
+        $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+        if($user == null)
+            return push_response(STATUS_ERROR,USER_NOT_FOUND);
+
+        $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
+        if(count($meal_plan) < 1){
+            $this->getDinnersInstance()->generateMealPlanEntriesForTheDay($user,$date);
+            $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
+        }
+        $arr = array();
+        foreach($meal_plan as $meal){
+            array_push($arr,$meal->to_array());
+        }
+        return push_response(STATUS_OK,$arr);
+        
+    }
+
+	/**
+	 * @return Dinners
+	 */
+	public function getDinnersInstance(): Dinners {
+		return $this->dinner;
+	}
+	
+	/**
+	 * @param Dinners $dinner 
+	 * @return self
+	 */
+	public function setDinnersInstance(Dinners $dinner): self {
+		$this->dinner = $dinner;
+		return $this;
+	}
 }
 ?>

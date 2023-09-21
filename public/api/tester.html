@@ -213,6 +213,21 @@
                         <input type="hidden" id="action" name="action" value="get_session_user_info">
                         <input type="submit" value="Get session user info">
                     </form>
+
+                    <form name="get_meal_plan" id="get_meal_plan" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="date">date:</label><br>
+                        <input type="text" id="date" name="date" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="get_meal_plan">
+                        <input type="submit" value="Get meal plan">
+                    </form>
                 </th>
                 
                 <th>
@@ -257,23 +272,24 @@ Object.prototype.prettyPrint = function(){
             var js = {};
             js["fetched"] = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
             js["response"] = data;
+
             document.getElementById("response").innerHTML=js.prettyPrint();
+
             if(js["response"]["Data"]["session"] != null){
                 document.getElementsByName("session").forEach(element => {
                     if(element.id="session"){
-                        element.value = js["Data"]["session"];
+                        element.value = js["response"]["Data"]["session"];
                     }
                 });
                 document.getElementsByName("key").forEach(element => {
                     if(element.id="key"){
-                        element.value = js["Data"]["key"];
+                        element.value = js["response"]["Data"]["key"];
                     }
                 });
             }
         }
         catch(e){
             document.getElementById("response").innerHTML=request.responseText;
-            //alert(e);
         }
         };
 
@@ -302,6 +318,8 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("get_children");
         attachFormSubmitEvent("is_valid_session");
         attachFormSubmitEvent("unit_test");
+        attachFormSubmitEvent("get_meal_plan");
+
 
 
 
