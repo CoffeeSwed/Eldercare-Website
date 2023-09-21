@@ -204,6 +204,7 @@ class Mysql implements Storage{
             }
         }
         $this->unlock();
+        return CREATED_USER;
     }
 
 
