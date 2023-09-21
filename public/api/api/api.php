@@ -61,8 +61,14 @@
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         if(!$this->getStorage()->exist_user($user)){
             if($this->has_permission("create",$user)){
-                $this->getStorage()->save_user($user);
-                return push_response(STATUS_OK,CREATED_USER);
+                if($user->hasRequiredFields()){
+                    $this->getStorage()->save_user($user);
+                    return push_response(STATUS_OK,CREATED_USER);
+
+                }else{
+                    return push_response(STATUS_ERROR,MISSING_INPUT);
+
+                }
             }else{
                 return push_response(STATUS_ERROR,PERMISSION_DENIED);
             }

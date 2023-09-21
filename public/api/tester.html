@@ -67,6 +67,8 @@
                     <label for="Caregiver">Caregiver</label><br>
                     <input type="radio" id="Administrator" name="type" value="Administrator">
                     <label for="Administrator">Administrator</label><br>
+                    <input type="radio" id="Moron" name="type" value="Moron">
+                    <label for="Moron">Moron</label><br>
 
                     
 
@@ -363,7 +365,6 @@ Object.prototype.prettyPrint = function(){
         }
         catch(e){
             document.getElementById("response").innerHTML=request.responseText;
-            alert(request.responseText);
         }
         };
 

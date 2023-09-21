@@ -279,5 +279,17 @@
 		$this->date_of_birth = get_date_by_str($date_of_birth,BASETIME);
 		return $this;
 	}
+
+	public function hasRequiredFields() : bool{
+		if($this->getUsername() == null || $this->getPassword() == ""){
+			return false;
+		}
+		if($this->getPassword() == null || $this->getPassword() == ""){
+			return false;
+		}
+		
+
+		return true;
+	}
 }
 ?>

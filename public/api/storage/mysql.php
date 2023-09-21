@@ -38,17 +38,14 @@ class Mysql implements Storage{
 
     private function send_query($str,$multi_query = false){
         //echo("Query!");
-        try{
+        
             if(!$multi_query)
             return $this->getConn()->query($str);
             else
             return $this->getConn()->multi_query($str);
 
-        }
-        catch(Exception $e){
-            $this->close();
-            throw $e;
-        }
+        
+       
     }
 
 
@@ -354,6 +351,8 @@ class Mysql implements Storage{
                 return USER_ALREADY_EXIST;
                 
             }
+           
+            
             $this->insert_table("users",$this->create_save_insert_array($user));
            
             $user->setId($this->getConn()->insert_id);
@@ -372,6 +371,7 @@ class Mysql implements Storage{
 	private function getConn($create_if_null = true) : ?mysqli {
         if($this->conn == null && $create_if_null){
             $this->setConn(new mysqli("p:".get_cfg_val("db_ip"),get_cfg_val("db_user"),get_cfg_val("db_password"),get_cfg_val("db_name")));
+            mysqli_report(MYSQLI_REPORT_ERROR);
         }
 		return $this->conn;
 	}
@@ -698,6 +698,7 @@ class Mysql implements Storage{
 
         return $arr; 
     }
+    
 }
 
 ?>
