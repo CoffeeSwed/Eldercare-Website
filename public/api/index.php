@@ -155,7 +155,7 @@
 		$session->setKey(get_argument("key"));
 		$session->setId(get_argument("session"));
 		
-		$user = new User(get_argument("username"),get_argument("password"),(get_argument("type") == null ? "Guest" : get_argument("type")),true);
+		$user = new User(get_argument("username"),get_argument("password"),((get_argument("type") == "null" ||get_argument("type") == null) ? null : get_argument("type")),true);
 		$user->setFirst_name(get_argument("first_name"));
 		$user->setLast_name(get_argument("last_name"));
 		$user->setContact_number(get_argument("contact_number"));
@@ -217,6 +217,10 @@
 
 		if(get_argument(ACTION) == GET_DINNER_TIMES_DATABASE){
 			echo($api->get_dinner_time_database());
+		}
+
+		if(get_argument(ACTION) == GET_MATCHING_USERS){
+			echo($api->get_matching_users($user));
 		}
 
 		if(get_argument(ACTION) == ""){

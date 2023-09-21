@@ -276,7 +276,7 @@
 	 * @return self
 	 */
 	public function setDate_of_birth($date_of_birth): self {
-		$this->date_of_birth = get_date_by_str($date_of_birth,"1800-01-01");
+		$this->date_of_birth = get_date_by_str($date_of_birth,BASETIME);
 		return $this;
 	}
 }

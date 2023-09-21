@@ -270,6 +270,10 @@
         
     }
 
+    public function get_matching_users(User $user){
+        return push_response(STATUS_OK,$this->getStorage()->get_matching_users($user));
+    }
+
     public function get_meal_database(){
         return push_response(STATUS_OK,$this->getDinnersInstance()->getMeal_types_to_array());
     }

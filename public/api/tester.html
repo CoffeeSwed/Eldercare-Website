@@ -231,6 +231,63 @@
                 </th>
                 
                 <th>
+                    <form name="get_matching_users" id="get_matching_users" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="password">password:</label><br>
+                        <input type="text" id="password" name="password" value=""><br>
+    
+                        <label for="first_name">First name:</label><br>
+                        <input type="text" id="first_name" name="first_name" value=""><br>
+                        <label for="last_name">Last name:</label><br>
+                        <input type="text" id="last_name" name="last_name" value=""><br>
+    
+                        <label for="email">Email:</label><br>
+                        <input type="text" id="email" name="email" value=""><br>
+    
+                        <label for="contact_number">Contact number:</label><br>
+                        <input type="text" id="contact_number" name="contact_number" value=""><br>
+    
+                        <label for="date_of_birth">Date of birth (year-month-day):</label><br>
+                        <input type="text" id="date_of_birth" name="date_of_birth" value=""><br>
+    
+                        <label for="address_country">Country:</label><br>
+                        <input type="text" id="address_country" name="address_country" value=""><br>
+    
+                        <label for="address_city">City:</label><br>
+                        <input type="text" id="address_city" name="address_city" value=""><br>
+    
+                        <label for="address_postcode">Post code:</label><br>
+                        <input type="text" id="address_postcode" name="address_postcode" value=""><br>
+    
+                        <label for="address_street_and_house">Street name and number:</label><br>
+                        <input type="text" id="address_street_and_house" name="address_street_and_house" value=""><br>
+    
+                        <label for="preferences">Preferences:</label><br>
+                        <input type="text" id="preferences" name="preferences" value=""><br>
+    
+                        <p>Type</p>
+                        <input type="radio" id="null" name="type" value="null">
+                        <label for="null">null</label><br>
+                        <input type="radio" id="Guest" name="type" value="Guest">
+                        <label for="Guest">Guest</label><br>
+                        <input type="radio" id="Patient" name="type" value="Patient">
+                        <label for="Patient">Patient</label><br>
+                        <input type="radio" id="Caregiver" name="type" value="Caregiver">
+                        <label for="Caregiver">Caregiver</label><br>
+                        <input type="radio" id="Administrator" name="type" value="Administrator">
+                        <label for="Administrator">Administrator</label><br>
+    
+                        
+    
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        
+                        <input type="hidden" id="action" name="action" value="get_matching_users">
+                        <input type="submit" id="get_matching_users_button" value="Get matching users">
+                    </form>
                     <form name="get_meal_information" id="get_meal_information" method="post" action="./index.php">
 
                         
@@ -244,6 +301,9 @@
                         <input type="hidden" id="action" name="action" value="get_dinner_times_database">
                         <input type="submit" value="Get Dinner type info ">
                     </form>
+                </th>
+                <th>
+                    
                 </th>
             </tr>
         </table>
@@ -334,6 +394,7 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("get_meal_plan");
         attachFormSubmitEvent("get_meal_information");
         attachFormSubmitEvent("get_dinner_time_information");
+        attachFormSubmitEvent("get_matching_users");
 
 
 

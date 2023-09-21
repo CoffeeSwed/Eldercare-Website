@@ -17,15 +17,17 @@
 	define("UNIT_TEST_PASSED","UNIT_TEST_PASSED");
 	define("NO_DATA_FOUND_FOR_DATE","NO_DATA_FOUND_FOR_DATE");
 	
-
+	/*Different statuses */
 	define("STATUS_OK","OK");
 	define("STATUS_WARNING","WARNING");
 	define("STATUS_ERROR","ERROR");
 	
+	/*Names used for response */
 	define ("DATA","Data");
 	define ("STATUS","Status");
 	
 
+	/*ACTIONS*/
 	define("CREATE_USER","create_user");
 	define("DELETE_USER","delete_user");
 	define("CREATE_SESSION","create_session");
@@ -34,7 +36,7 @@
 	define("GET_MEAL_PLAN","get_meal_plan");
 	define("GET_MEAL_DATABASE","get_meal_database");
 	define("GET_DINNER_TIMES_DATABASE","get_dinner_times_database");
-
+	define("GET_MATCHING_USERS","get_matching_users");
 
 	define("IS_VALID_SESSION","is_valid_session");
 	define("GET_SESSION_USER_INFO","get_session_user_info");
@@ -45,10 +47,13 @@
 
 	define("ACTION","action");
 
+	/*Different user types! */
 	define("TYPE_ADMIN","Administrator");
 	define("TYPE_CAREGIVER","Caregiver");
 	define("TYPE_PATIENT","Patient");
 	define("TYPE_GUEST","Guest");
+
+	define("BASETIME","1800-1-1");
 
 	
 	function get_cfg_val($name){

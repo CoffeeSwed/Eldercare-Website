@@ -66,9 +66,9 @@ class Mysql implements Storage{
         $this->cache_flush();
     }
 
-    private function fetch_table($table_name,$to_return,$where,$end_tag = ""){
+    private function fetch_table($table_name,$to_return,$where,$end_tag = "",$pre_tag = ""){
         $response = array();
-        $query = "SELECT ";
+        $query = "SELECT ".$pre_tag.($pre_tag == "" ? "" : " ");
         for($i = 0; $i < count($to_return); $i++){
             if($i == 0){
                 $query=$query.$to_return[$i];
@@ -640,6 +640,39 @@ class Mysql implements Storage{
 
     public function refreshMealPlanCache(){
         $this->meals_plan_cache = array();
+    }
+
+    public function get_matching_users(User $user) : array{
+        $arr = array();
+        
+        $where = array();
+        
+        //user_name
+        if($user->getUsername() != ""){
+            $where["username"] = $user->getUsername();
+        }
+        if($user->getFirst_name() != ""){
+            $where["first_name"] = $user->getFirst_name();
+        }
+        if($user->getLast_name() != ""){
+            $where["last_name"] = $user->getLast_name();
+        }
+        if($user->getDate_of_birth() != BASETIME){
+            $where["date_of_birth"] = $user->getDate_of_birth();
+        }
+        if($user->getType() != null){
+            $where["type"] = $user->getType();
+        }
+        if($user->getContact_number() != null){
+            $where["contact_number"] = $user->getContact_number();
+
+        }
+
+        foreach($this->fetch_table("users",array("id"),$where,"","DISTINCT") as $row){
+            array_push($arr,$row["id"]);
+        }
+
+        return $arr; 
     }
 }
 
