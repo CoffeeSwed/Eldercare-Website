@@ -136,7 +136,7 @@ class Mysql implements Storage{
         }
 
         $sql = $sql.")";
-        $this->send_query($sql);
+        return $this->send_query($sql);
 
         
     }
@@ -159,7 +159,7 @@ class Mysql implements Storage{
 
             }
         }
-        $this->send_query($sql);
+        return $this->send_query($sql);
     }
 
     /**

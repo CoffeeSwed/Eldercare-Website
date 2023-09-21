@@ -280,16 +280,6 @@
 		return $this;
 	}
 
-	public function hasRequiredFields() : bool{
-		if($this->getUsername() == null || $this->getPassword() == ""){
-			return false;
-		}
-		if($this->getPassword() == null || $this->getPassword() == ""){
-			return false;
-		}
-		
-
-		return true;
-	}
+	
 }
 ?>
