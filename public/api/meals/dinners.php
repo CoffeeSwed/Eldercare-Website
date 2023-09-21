@@ -37,12 +37,14 @@ class Dinners{
 
     public function addDinner(Dinner_Time $type){
         array_push($this->getDinners(),$type);
-        //
+		throw new Exception('Not implemented');
+        
     }
 
 	public function addMealType(Meal_Type $type){
+		
 		array_push($this->getMeal_types(),$type);
-	}
+		throw new Exception('Not implemented');	}
 
 	/**
 	 * @return Storage

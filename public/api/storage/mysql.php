@@ -10,6 +10,8 @@ class Mysql implements Storage{
     private array $user_cache;
     private array $permission_cache;
 
+    private array $meals_plan_cache;
+
     
     private function lock(){
         $this->setLock_count($this->getLock_count() + 1);
@@ -531,6 +533,7 @@ class Mysql implements Storage{
     public function cache_flush(){
         $this->refreshPermissionCache();
         $this->refreshUserCache();
+        $this->refreshMealPlanCache();
     }
 
     public function load_dinners() : array{
@@ -600,6 +603,11 @@ class Mysql implements Storage{
     }
 
     public function load_meal_plan_entries($owner_id,$date) : array{
+        if(isset($this->getMeals_cache()[$owner_id])){
+            if(isset($this->getMeals_cache()[$owner_id][$date])){
+                return $this->getMeals_cache()[$owner_id][$date];
+            }
+        }
         $arr = array();
         $res = $this->fetch_table("meal_plan_entry",array("*"),array("owner" => $owner_id, "date" => $date));
         foreach($res as $row){
@@ -609,7 +617,29 @@ class Mysql implements Storage{
             $meal_plan->setHas_eaten(intval($row["has_eaten"]));
             array_push($arr,$meal_plan);
         }
+        $this->getMeals_cache()[$owner_id] = array();
+        $this->getMeals_cache()[$owner_id][$date] = $arr;
         return $arr;
+    }
+
+	/**
+	 * @return array
+	 */
+	public function& getMeals_cache(): array {
+		return $this->meals_plan_cache;
+	}
+	
+	/**
+	 * @param array $meals_cache 
+	 * @return self
+	 */
+	public function setMeals_cache(array $meals_cache): self {
+		$this->meals_plan_cache = $meals_cache;
+		return $this;
+	}
+
+    public function refreshMealPlanCache(){
+        $this->meals_plan_cache = array();
     }
 }
 

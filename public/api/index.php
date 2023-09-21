@@ -168,7 +168,6 @@
 			$api = $_SESSION["api"];
 			$api->setSession($session);
 			$api->getStorage()->open();
-			$api->setDinnersInstance(new Dinners($api->getStorage()));
 		}
 		
 
