@@ -419,20 +419,21 @@ class Mysql implements Storage{
 
     public function insert_session(Session $session){
         $this->lock();
-        $sql = "INSERT INTO sessions(session,pass,owner) VALUES(UuidToBin(UUID()), ".$this->encodetostr($session->getKey()).", ".$this->encodetostr($session->getOwner_id()).")";
-        $this->send_query($sql);
+        if($this->load_user($session->getOwner_id())){
+            $sql = "INSERT INTO sessions(session,pass,owner) VALUES(UuidToBin(UUID()), ".$this->encodetostr($session->getKey()).", ".$this->encodetostr($session->getOwner_id()).")";
+            $this->send_query($sql);
 
-        
+            
 
-        $sql = "SELECT UuidFromBin(session),pass FROM sessions WHERE id='".$this->getConn()->insert_id."'";
-        $res = $this->send_query($sql);
-				if($res->num_rows == 1){
-					
-					$row = $res->fetch_assoc();
-					
-					$session->setId( $row["UuidFromBin(session)"]);
-				}
-
+            $sql = "SELECT UuidFromBin(session),pass FROM sessions WHERE id='".$this->getConn()->insert_id."'";
+            $res = $this->send_query($sql);
+                    if($res->num_rows == 1){
+                        
+                        $row = $res->fetch_assoc();
+                        
+                        $session->setId( $row["UuidFromBin(session)"]);
+                    }
+        }
         $this->unlock();
 
     }
