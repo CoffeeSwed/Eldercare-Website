@@ -271,7 +271,11 @@
     }
 
     public function get_matching_users(User $user){
-        return push_response(STATUS_OK,$this->getStorage()->get_matching_users($user));
+        if($this->has_permission("list_matching_users",$user)){
+            return push_response(STATUS_OK,$this->getStorage()->get_matching_users($user));
+        }else{
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
+        }
     }
 
     public function get_meal_database(){

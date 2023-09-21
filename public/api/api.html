@@ -24,31 +24,44 @@
                 <th>Parameters</th>
                 
                 <th>Notes</th>
+
+                <th>Permission</th>
             </tr>
             <tr>
                 <th>create_user</th>
                 <th>username, password, email, contact_number, date_of_birth, address_country, address_city, address_postcode, address_street_and_house(for example: Diskusgatan 4 eller SommarGatan 116 LGH 1405),type (user type, Administrator, Caregiver, Patient or Guest) Optional: ( session & key preferences)</th>
                 <th>Creates a user with specified username and password. If the user is not in a session the rules defined by the permission file (config.ini) determines if they can create the specified type of user. If the user is logged in, their user type is used to determine if they cant create the requested account by using the rules in the config. </th>
+                <th>create</th>
+            </tr>
+            <tr>
+                <th>delete_user</th>
+                <th>username, id, session, key </th>
+                <th>Deletes user if it can be found</th>
+                <th>delete</th>
             </tr>
             <tr>
                 <th>create_session</th>
                 <th>username, password</th>
                 <th>Creates a session for specified username if password is correct, if success, it returns the session id and session key. If password is incorrect or the user dont exist, it returns USER_NOT_FOUND error!</th>
+                <th>none</th>
             </tr>
             <tr>
                 <th>is_valid_session</th>
                 <th>session, key</th>
                 <th>Returns true if the input is valid, otherwise false</th>
+                <th>none</th>
             </tr>
             <tr>
                 <th>get_session_user_info</th>
                 <th>session, key</th>
                 <th>Returns the current user information stored in the table users.</th>
+                <th>none</th>
             </tr>
             <tr>
                 <th>get_user_info</th>
                 <th>session, key, optional(username, id --- index id in the users table)</th>
                 <th>Returns the specified user information if requester has permission to do so - look in config.ini!</th>
+                <th>browse_info_of</th>
             </tr>
             <tr>
                 <th>get_website_config</th>
@@ -59,6 +72,7 @@
                 <th>add_parent / delete_parent</th>
                 <th>username (child username), id(child id), parent_username(parent username), parent_id(parent id), session, key</th>
                 <th>Adds or removes a parent from a user.</th>
+                <th>add_parent_to or delete_parent_to</th>
             </tr>
 
             <tr>
@@ -78,8 +92,9 @@
             </tr>
             <tr>
                 <th>get_matching_users</th>
-                <th>Same input as create_user</th>
+                <th>Same input as create_user except sensitive information like password or etc.</th>
                 <th>Returns user ids which has matching input as given!!</th>
+                <th>list_matching_users</th>
             </tr>
         </table>
     </body>
