@@ -79,7 +79,7 @@
 
 	public function to_array() : array{
 		$arr = array();
-		$arr["id"] = $this->getId();
+		$arr["id"] = intval($this->getId());
 		$arr["swedish_name"] = $this->getSwedish_name();
 		$arr["english_name"] = $this->getEnglish_name();
 		$arr["available_at"] = $this->getAvailable_at();

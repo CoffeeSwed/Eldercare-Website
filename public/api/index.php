@@ -212,9 +212,18 @@
 			echo($api->get_meal_plan($user,get_argument("date")));
 		}
 
+		if(get_argument(ACTION) == GET_MEAL_DATABASE){
+			echo($api->get_meal_database());
+		}
+
+		if(get_argument(ACTION) == GET_DINNER_TIMES_DATABASE){
+			echo($api->get_dinner_time_database());
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}
+		
 
 		$api->getStorage()->close();
 	}

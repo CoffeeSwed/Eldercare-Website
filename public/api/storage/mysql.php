@@ -249,6 +249,9 @@ class Mysql implements Storage{
         if($user != null){
             $sql = "DELETE FROM users WHERE id=".$this->encodetostr($user->getId());
             $this->lock();
+            $this->send_query($sql);
+
+            $sql = "DELETE FROM meal_plan_entry WHERE owner=".$this->encodetostr($user->getId());
 
             $this->send_query($sql);
             
@@ -594,6 +597,19 @@ class Mysql implements Storage{
             $meal_plan->setHas_eaten(intval($row["has_eaten"]));
         }
         return $meal_plan;
+    }
+
+    public function load_meal_plan_entries($owner_id,$date) : array{
+        $arr = array();
+        $res = $this->fetch_table("meal_plan_entry",array("*"),array("owner" => $owner_id, "date" => $date));
+        foreach($res as $row){
+            $meal_plan = null;
+            $meal_plan = new Meal_Plan_Entry($row["at"],json_decode($row["meal_types"]),$row["owner"],$row["date"]);
+            $meal_plan->setId($row["id"]);
+            $meal_plan->setHas_eaten(intval($row["has_eaten"]));
+            array_push($arr,$meal_plan);
+        }
+        return $arr;
     }
 }
 

@@ -83,7 +83,7 @@ class Dinner_Time{
 
 	public function to_array() : array{
 		$arr = array();
-		$arr["id"] = $this->getId();
+		$arr["id"] = intval($this->getId());
 		$arr["swedish_name"] = $this->getSwedish_name();
 		$arr["english_name"] = $this->getEnglish_name();
 		$arr["when"] = $this->getWhen();

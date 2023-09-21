@@ -218,6 +218,12 @@
             return true;
         }
 
+        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_self")->getAllowed()){
+            if($user->getId() == $creator->getId()){
+                return true;
+            }
+        }
+
         if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_all")->getAllowed()){
             if($this->is_handled($creator)){
                 return true;
@@ -229,6 +235,7 @@
                 return true;
             }
         }
+        
 
         return false;
     }
@@ -239,18 +246,36 @@
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
         if($user == null)
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
+        
+        if(!$this->has_permission("get_meal_plan_of",$user))
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
 
         $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
-        if(count($meal_plan) < 1){
-            $this->getDinnersInstance()->generateMealPlanEntriesForTheDay($user,$date);
-            $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
+        if(count($meal_plan) != count($this->getDinnersInstance()->getDinners())){
+            
+            if($date == null || $date == get_date_today()){
+                $this->getDinnersInstance()->generateMealPlanEntriesForTheDay($user,$date);
+                $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
+            }else{
+                return push_response(STATUS_ERROR,NO_DATA_FOUND_FOR_DATE);
+            }
         }
         $arr = array();
         foreach($meal_plan as $meal){
             array_push($arr,$meal->to_array());
         }
-        return push_response(STATUS_OK,$arr);
         
+            return push_response(STATUS_OK,$arr);
+        
+        
+    }
+
+    public function get_meal_database(){
+        return push_response(STATUS_OK,$this->getDinnersInstance()->getMeal_types_to_array());
+    }
+
+    public function get_dinner_time_database(){
+        return push_response(STATUS_OK,$this->getDinnersInstance()->getDinners_to_array());
     }
 
 	/**

@@ -15,6 +15,7 @@
 	define("ALREADY_CHILD","ALREADY_CHILD");
 	define("NOT_A_CHILD","NOT_A_CHILD");
 	define("UNIT_TEST_PASSED","UNIT_TEST_PASSED");
+	define("NO_DATA_FOUND_FOR_DATE","NO_DATA_FOUND_FOR_DATE");
 	
 
 	define("STATUS_OK","OK");
@@ -31,6 +32,8 @@
 	define("ADD_PARENT","add_parent");
 	define("DELETE_PARENT","delete_parent");
 	define("GET_MEAL_PLAN","get_meal_plan");
+	define("GET_MEAL_DATABASE","get_meal_database");
+	define("GET_DINNER_TIMES_DATABASE","get_dinner_times_database");
 
 
 	define("IS_VALID_SESSION","is_valid_session");
@@ -112,6 +115,11 @@
 		}
 
 		return get_date_by_str($basetime,$basetime);
+	}
+
+	function get_date_today(){
+		return get_date_by_str(date("Y/m/d"),date("Y/m/d"));
+
 	}
 		
 		

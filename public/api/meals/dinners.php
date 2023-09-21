@@ -167,20 +167,12 @@ class Dinners{
 	}
 
 	public function loadMealPlanEntriesForUser(User $user, string $date = null) : array{
-		$arr = array();
 		$date = get_date_by_str($date,date("Y/m/d"));
-		$this->getStorage()->open();
 		
 
-		foreach($this->getDinners() as $dinner){
-			$meal_entry = $this->loadMealPlanEntry($dinner,$user,$date);
-			if($meal_entry != null){
-				array_push($arr,$meal_entry);
-			}
-		}
+		
 
-		$this->getStorage()->close();
-		return $arr;
+		return $this->getStorage()->load_meal_plan_entries($user->getId(),$date);
 	}
 
 	public function generateMealPlanEntriesForTheDay(User $user, string $date = null){

@@ -231,6 +231,19 @@
                 </th>
                 
                 <th>
+                    <form name="get_meal_information" id="get_meal_information" method="post" action="./index.php">
+
+                        
+                        <input type="hidden" id="action" name="action" value="get_meal_database">
+                        <input type="submit" value="Get Meal type info ">
+                    </form>
+
+                    <form name="get_dinner_time_information" id="get_dinner_time_information" method="post" action="./index.php">
+
+                        
+                        <input type="hidden" id="action" name="action" value="get_dinner_times_database">
+                        <input type="submit" value="Get Dinner type info ">
+                    </form>
                 </th>
             </tr>
         </table>
@@ -319,6 +332,8 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("is_valid_session");
         attachFormSubmitEvent("unit_test");
         attachFormSubmitEvent("get_meal_plan");
+        attachFormSubmitEvent("get_meal_information");
+        attachFormSubmitEvent("get_dinner_time_information");
 
 
 

@@ -91,11 +91,10 @@
 
 		$arr["has_eaten"] = $this->getHas_eaten() ? true : false;
 
-
-		
-
-		$arr["meal_types"] = $this->getMeal_types();
-
+		$arr["meal_types"] = array();
+		foreach($this->getMeal_types() as $meal_type){
+			array_push($arr["meal_types"],intval($meal_type));
+		}
 	
 		
 
