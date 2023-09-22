@@ -144,7 +144,7 @@ class Dinners{
 
 		$meals_available = $this->get_meal_types_available_at($when);
 		$meal_entry = new Meal_Plan_Entry($when->getId(),array());
-		$meal_entry->addMeal_type($this->getMeal_types()[random_int(0,count($this->getMeal_types())-1)]->getId());
+		$meal_entry->addMeal_type($meals_available[random_int(0,count($meals_available)-1)]->getId());
 		$meal_entry->setOwnerID($user == null ? null : $user->getId());
 
 		return $meal_entry;

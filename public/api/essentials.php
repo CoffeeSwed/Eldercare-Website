@@ -34,8 +34,8 @@
 	define("ADD_PARENT","add_parent");
 	define("DELETE_PARENT","delete_parent");
 	define("GET_MEAL_PLAN","get_meal_plan");
-	define("GET_MEAL_DATABASE","get_meal_database");
-	define("GET_DINNER_TIMES_DATABASE","get_dinner_times_database");
+	define("GET_MEAL_DATABASE","get_meal_types");
+	define("GET_DINNER_TIMES_DATABASE","get_dinner_times");
 	define("GET_MATCHING_USERS","get_matching_users");
 
 	define("IS_VALID_SESSION","is_valid_session");

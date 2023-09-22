@@ -102,8 +102,8 @@
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
         if($user != null && $user2 != null && $creator != null){
-                if($this->has_permission("add_parent_to",$user))
-                return push_response(STATUS_ERROR,PERMISSION_DENIED);
+                if(!$this->has_permission("add_parent_to",$user))
+                     return push_response(STATUS_ERROR,PERMISSION_DENIED);
             
                  $user->add_parent($user2->getId());
                  $this->getStorage()->save_user($user);
@@ -163,7 +163,7 @@
     public function get_session_user_info(){
         $user = $this->getStorage()->get_user_from_session($this->getSession());
         if($user != null){
-            return push_response(STATUS_OK,$user->to_json());
+            return push_response(STATUS_OK,array("User" => $user->to_json()));
         }
 
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
@@ -178,7 +178,7 @@
             if($this->has_permission("browse_info_of",$user)){
                 $p = $user->to_json();
                 $p["handled"] = $this->is_handled(($user)) ? "True" : False;
-                return push_response(STATUS_OK,$p);
+                return push_response(STATUS_OK,array("User" => $p));
             }else{
                 return push_response(STATUS_ERROR,PERMISSION_DENIED);
             }
@@ -273,7 +273,7 @@
             array_push($arr,$meal->to_array());
         }
         
-            return push_response(STATUS_OK,$arr);
+            return push_response(STATUS_OK,array("Meal_plan" => $arr));
         
         
     }
@@ -287,11 +287,11 @@
     }
 
     public function get_meal_database(){
-        return push_response(STATUS_OK,$this->getDinnersInstance()->getMeal_types_to_array());
+        return push_response(STATUS_OK,array("Meal_types" => $this->getDinnersInstance()->getMeal_types_to_array()));
     }
 
     public function get_dinner_time_database(){
-        return push_response(STATUS_OK,$this->getDinnersInstance()->getDinners_to_array());
+        return push_response(STATUS_OK,array("Dinner_times" => $this->getDinnersInstance()->getDinners_to_array()));
     }
 
 	/**
