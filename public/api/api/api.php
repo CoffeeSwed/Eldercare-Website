@@ -264,11 +264,12 @@
         $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
         if(count($meal_plan) != count($this->getDinnersInstance()->getDinners())){
             
-            if($date == null || $date == get_date_today()){
+            //strtotime returns time in seconds! 
+            if(strtotime(get_date_today()) <= strtotime($date) && (strtotime($date) - strtotime(get_date_today()) <= get_cfg_val("max_pre_generating_days")*3600*24)){
                 $this->getDinnersInstance()->generateMealPlanEntriesForTheDay($user,$date);
                 $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
             }else{
-                return push_response(STATUS_ERROR,NO_DATA_FOUND_FOR_DATE);
+                return push_response(STATUS_ERROR,NO_DATA_FOUND_FOR_DATE . "'".$date."'");
             }
         }
         $arr = array();
