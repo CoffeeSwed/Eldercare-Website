@@ -44,7 +44,7 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
 
         public function save_meal_plan_entry(Meal_Plan_Entry& $meal_plan_entry);
 
-        public function load_meal_plan_entry($owner_id, $dinner_time_id,$date) : ?Meal_Plan_Entry;
+        public function load_meal_plan_entry($owner_id, $dinner_time_id,$date,$id=null) : ?Meal_Plan_Entry;
 
         public function load_meal_plan_entries($owner_id,$date);
 

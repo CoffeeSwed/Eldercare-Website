@@ -44,6 +44,7 @@
 	define("GET_WEBSITE_CFG","get_website_config");
 	define("GET_CHILDREN","get_children");
 	define("UNIT_TEST","unit_test");
+	define("SET_STATUS_OF_MEAL_PLAN_ENTRY","set_status_of_meal_plan_entry");
 
 	define("ACTION","action");
 

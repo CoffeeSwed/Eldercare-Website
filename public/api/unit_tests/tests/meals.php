@@ -94,6 +94,14 @@
         }
             $this->addEntry(new Unit_Test_Entry("generate_meal_plan_entry_for_the_day",STATUS_OK,"Could generate a meal plan for the day!"));
         
+        $meal_plan_entry = $dinner->loadMealPlanEntry(null,null,null,$dinner->loadMealPlanEntriesForUser($user)[0]->getId());
+        if($meal_plan_entry == null){
+            $this->addEntry(new Unit_Test_Entry("LoadMealPLantEntry",STATUS_ERROR,"Could not load a meal plan!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("LoadMealPLantEntry",STATUS_OK,"Could load a meal plan!"));
+
     }
 }
 

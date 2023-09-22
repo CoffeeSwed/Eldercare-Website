@@ -157,15 +157,17 @@ class Dinners{
 
 	}
 
-	public function loadMealPlanEntry(Dinner_Time $when,User $owner,?string $date = null){
+	public function loadMealPlanEntry(?Dinner_Time $when,?User $owner,?string $date = null,$id = null){
 		
 		$date = get_date_by_str($date,date("Y/m/d"));
 
 
-		$meal = $this->getStorage()->load_meal_plan_entry($owner->getId(),$when->getId(),$date);
-		
+		$meal = $this->getStorage()->load_meal_plan_entry(($owner != null) ? $owner->getId() : null,($when != null) ? $when->getId() : null,$date,$id);
+			
 
 		return $meal;
+		
+		
 	}
 
 	public function loadMealPlanEntriesForUser(User $user, string $date = null) : array{
@@ -186,6 +188,7 @@ class Dinners{
 		}
 
 	}
+
 }
 
 ?>

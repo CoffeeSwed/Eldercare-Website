@@ -212,7 +212,7 @@
         return false;
     }
 
-    private function has_permission(string $name, User $user){
+    private function has_permission(string $name, ?User $user){
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         $creator_type = $creator == null ? "null" : $creator->getType();
 
@@ -221,29 +221,32 @@
             return true;
         }
 
-        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_".$user->getType())->getAllowed()){
-            
-            return true;
-        }
-
         if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_self")->getAllowed()){
             if($user->getId() == $creator->getId()){
                 return true;
             }
         }
+        if($user != null){
 
-        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_all")->getAllowed()){
-            if($this->is_handled($creator)){
+            if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_".$user->getType())->getAllowed()){
+                
                 return true;
             }
-        }
 
-        if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_".$user->getType())->getAllowed()){
-            if($this->is_handled($creator)){
-                return true;
-            }
-        }
         
+
+            if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_all")->getAllowed()){
+                if($this->is_handled($creator)){
+                    return true;
+                }
+            }
+
+            if($this->getStorage()->get_permission("allow_".$creator_type."_".$name."_handled_".$user->getType())->getAllowed()){
+                if($this->is_handled($creator)){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -309,5 +312,17 @@
 		$this->dinner = $dinner;
 		return $this;
 	}
+
+    public function setStatusOfMealEntry($eaten,$id){
+        $meal_plan_entry = $this->getDinnersInstance()->loadMealPlanEntry(null,null,null,$id);
+        $user = $this->getStorage()->load_user($meal_plan_entry->getOwnerID());
+        if($this->has_permission("edit_meal_state_of",$user)){
+            $meal_plan_entry->setHas_eaten($eaten == "True" || $eaten == "true");
+            $this->getDinnersInstance()->saveMealPlanEntry($meal_plan_entry);
+            return push_response(STATUS_OK,USER_UPDATED);
+        }else{
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
+        }
+    }
 }
 ?>

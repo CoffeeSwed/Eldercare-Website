@@ -615,16 +615,30 @@ class Mysql implements Storage{
         $this->unlock();
     }
 
-    public function load_meal_plan_entry($owner_id, $dinner_time_id,$date) : ?Meal_Plan_Entry{
-
+    public function load_meal_plan_entry($owner_id, $dinner_time_id,$date,$id=null) : ?Meal_Plan_Entry{
+       
         $meal_plan = null;
-        $res = $this->fetch_table("meal_plan_entry",array("*"),array("owner" => $owner_id, "at" => $dinner_time_id, "date" => $date));
+        $to_request = array();
+        if($owner_id != null){
+            $to_request["owner"] = $owner_id;
+        }
+        if($dinner_time_id != null){
+            $to_request["at"] = $dinner_time_id;
+        }
+        if($date != null){
+            $to_request["date"] = $date;
+        }
+        if($id != null){
+            $to_request["id"] = $id;
+        }
+        $res = $this->fetch_table("meal_plan_entry",array("*"),$to_request);
         if(count($res) != 0){
             $row = $res[0];
             $meal_plan = new Meal_Plan_Entry($row["at"],json_decode($row["meal_types"]),$row["owner"],$row["date"]);
             $meal_plan->setId($row["id"]);
             $meal_plan->setHas_eaten(intval($row["has_eaten"]));
         }
+        
         return $meal_plan;
     }
 

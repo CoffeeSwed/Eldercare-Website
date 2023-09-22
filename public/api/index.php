@@ -219,6 +219,10 @@
 			echo($api->get_matching_users($user));
 		}
 
+		if(get_argument(ACTION) == SET_STATUS_OF_MEAL_PLAN_ENTRY){
+			echo($api->setStatusOfMealEntry(get_argument("eaten"),get_argument("id")));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}
