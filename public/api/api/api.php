@@ -63,12 +63,24 @@
         if($user->getPassword() == null || $user->getPassword() == ""){
             return push_response(STATUS_ERROR,MISSING_INPUT);
         }
+        if($user->getType() == null || $user->getType() == ""){
+            return push_response(STATUS_ERROR,MISSING_INPUT);
+        }
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         if(!$this->getStorage()->exist_user($user)){
             if($this->has_permission("create",$user)){
-               
+                
+
                     if($this->getStorage()->save_user($user)){
+                        
                         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+
+                        $user->add_parent($creator->getId());
+
+                        $this->getStorage()->save_user($user);
+
+                        $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+
 
                         return push_response(STATUS_OK,array("User" => $user->to_json()));
                     }else{
