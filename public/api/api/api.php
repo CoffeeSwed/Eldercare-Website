@@ -63,7 +63,9 @@
             if($this->has_permission("create",$user)){
                
                     if($this->getStorage()->save_user($user)){
-                        return push_response(STATUS_OK,CREATED_USER);
+                        $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+
+                        return push_response(STATUS_OK,array("User" => $user->to_json()));
                     }else{
                         return push_response(STATUS_ERROR,UNKNOWN_ERROR);
                     }
