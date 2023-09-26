@@ -57,7 +57,12 @@
 
     public function create_user(User $user){
         $this->getStorage()->cache_flush();
-
+        if($user->getUsername() == null || $user->getUserName() == ""){
+            return push_response(STATUS_ERROR,MISSING_INPUT);
+        }
+        if($user->getPassword() == null || $user->getPassword() == ""){
+            return push_response(STATUS_ERROR,MISSING_INPUT);
+        }
         $creator = $this->getStorage()->get_user_from_session($this->getSession());
         if(!$this->getStorage()->exist_user($user)){
             if($this->has_permission("create",$user)){
