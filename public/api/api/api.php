@@ -339,7 +339,7 @@
         if($this->has_permission("edit_meal_state_of",$user)){
             $meal_plan_entry->setHas_eaten($eaten == "True" || $eaten == "true");
             $this->getDinnersInstance()->saveMealPlanEntry($meal_plan_entry);
-            return push_response(STATUS_OK,USER_UPDATED);
+            return push_response(STATUS_OK,array("entry" => $meal_plan_entry->to_array()) );
         }else{
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
         }
