@@ -159,8 +159,9 @@ class Dinners{
 
 	public function loadMealPlanEntry(?Dinner_Time $when,?User $owner,?string $date = null,$id = null){
 		
-		$date = get_date_by_str($date,date("Y/m/d"));
-
+		if($date != null){
+			$date = get_date_by_str($date,date("Y/m/d"));
+		}
 
 		$meal = $this->getStorage()->load_meal_plan_entry(($owner != null) ? $owner->getId() : null,($when != null) ? $when->getId() : null,$date,$id);
 			

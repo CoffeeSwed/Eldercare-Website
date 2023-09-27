@@ -272,7 +272,7 @@
 
     public function get_meal_plan(User $user, ?string $date){
         if($date == "")
-            $date = null;
+            $date = "now";
         $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
         if($user == null)
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
