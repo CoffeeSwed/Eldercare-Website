@@ -197,6 +197,20 @@ class Dinners{
 		$this->getStorage()->set_note($time->getId(),$user->getId(),$note);
 	}
 	
+	public function getSettings(Dinner_Time $time, User $user){
+		return $this->getStorage()->get_settings_for_dinner_time($time->getId(),$user->getId());
+	}
+
+	public function setSetting(Dinner_Time $time, User $user,string $setting, bool $val){
+		$settings = $this->getStorage()->get_settings_for_dinner_time($time->getId(),$user->getId());
+		$settings[$setting] = $val;
+		foreach(array_keys($settings) as $key){
+            if(!$settings[$key]){
+				$settings[$key] = "0";
+            }
+        }
+		$this->getStorage()->save_settings_for_dinner_time($time->getId(),$user->getId(),$settings);
+	}
 
 }
 

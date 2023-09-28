@@ -131,6 +131,35 @@
         }
         $this->addEntry(new Unit_Test_Entry("SetNote",STATUS_OK,"Note was empty when it should be!"));
 
+        $settings = $dinner->getSettings($dinner_time,$user);
+        
+        if($settings["show_note"] != $meal_plan_entry->getShow_note() || $settings["enabled"] != $meal_plan_entry->getEnabled()
+        || $settings["show_meal_types"] != $meal_plan_entry->getShow_meal_types()){
+            $this->addEntry(new Unit_Test_Entry("GetSettings",STATUS_ERROR,"Settings was not equal to given settings!
+            show_meal_types_good = ".($meal_plan_entry->getShow_meal_types() == $settings["show_meal_types"])." 
+            show_note_good = ".($meal_plan_entry->getShow_note() == $settings["show_note"])." 
+            enabled_good = ".($meal_plan_entry->getEnabled() == $settings["enabled"])." "));
+            $this->setStatus(STATUS_ERROR);
+
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("GetSettings",STATUS_OK,"Settings for meal entry was equal to given settings!"));
+
+        $dinner->setSetting($dinner_time,$user,"show_note",!$settings["show_note"]);
+        $dinner->setSetting($dinner_time,$user,"enabled",!$settings["enabled"]);
+        $dinner->setSetting($dinner_time,$user,"show_meal_types",!$settings["show_meal_types"]);
+
+        $settings2 = $dinner->getSettings($dinner_time,$user);
+
+        foreach(array_keys($settings2) as $key){
+            if($settings2[$key] == $settings[$key]){
+                $this->addEntry(new Unit_Test_Entry("SetSettings",STATUS_ERROR,"Settings for meal entry was NOT equal to given ".$key." setting!"));
+                return;
+            }
+        }
+        
+        $this->addEntry(new Unit_Test_Entry("SetSettings",STATUS_OK,"Settings for meal entry was equal to given settings!"));
+
 
     }
 }

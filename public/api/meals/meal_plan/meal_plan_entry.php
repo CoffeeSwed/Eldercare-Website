@@ -18,6 +18,12 @@
 
 		private $note;
 
+		private $show_note;
+
+		private $show_meal_types;
+
+		private $enabled;
+
 
 
 	/**
@@ -72,7 +78,8 @@
 		return $this;
 	}
 
-    public function __construct(string $dinner_time_id, array $to_eat, string $owner_id=null, $day=null, $note=null){
+    public function __construct(string $dinner_time_id, array $to_eat, string $owner_id=null, $day=null, $note=null,$show_note=false,
+		$show_meal_types=false, $enabled = false){
         $this->setDimmer_time($dinner_time_id);
         $this->setMeal_types($to_eat);
         $this->setHas_eaten(false);
@@ -80,6 +87,10 @@
 		$this->setOwnerID($owner_id);
 		$this->setDay(get_date_by_str($day,date("Y/m/d")));
 		$this->setNote($note);
+		$this->setShow_note($show_note);
+		$this->setShow_meal_types($show_meal_types);
+		$this->setEnabled($enabled);
+
 	}
 
 	public function to_array() : array{
@@ -96,6 +107,14 @@
 
 
 		$arr["note"] = $this->getNote() == null ? "" : $this->getNote();
+
+		$arr["show_note"] = $this->getShow_note();
+
+		$arr["show_meal_types"] = $this->getShow_meal_types();
+
+		$arr["enabled"] = $this->getEnabled();
+
+
 
 		$arr["meal_types"] = array();
 		foreach($this->getMeal_types() as $meal_type){
@@ -167,6 +186,52 @@
 		$this->note = $note;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getShow_note() {
+		return $this->show_note;
+	}
 	
+	/**
+	 * @param mixed $show_note 
+	 * @return self
+	 */
+	public function setShow_note($show_note): self {
+		$this->show_note = $show_note;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getShow_meal_types() {
+		return $this->show_meal_types;
+	}
+	
+	/**
+	 * @param mixed $show_meal_types 
+	 * @return self
+	 */
+	public function setShow_meal_types($show_meal_types): self {
+		$this->show_meal_types = $show_meal_types;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getEnabled() {
+		return $this->enabled;
+	}
+	
+	/**
+	 * @param mixed $enabled 
+	 * @return self
+	 */
+	public function setEnabled($enabled): self {
+		$this->enabled = $enabled;
+		return $this;
+	}
 }
 ?>

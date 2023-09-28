@@ -227,6 +227,15 @@
 			echo($api->setNote(get_argument("dinner_time_id"),$user,get_argument("note")));
 		}
 
+		if(get_argument(ACTION) == SET_SETTING){
+			$val = get_argument("value");
+			if($val == "True" || $val == "1" || $val == "true" || $val == true)
+				$val = true;
+			else
+				$val = false;
+			echo($api->setSetting(get_argument("dinner_time_id"),$user,get_argument("setting"),$val));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}

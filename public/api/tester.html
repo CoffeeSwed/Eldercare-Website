@@ -168,6 +168,25 @@
                         <input type="hidden" id="action" name="action" value="get_children">
                         <input type="submit" value="Get children">
                     </form>
+
+                    <form name="set_setting" id="set_setting" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="setting">Dinner time id:</label><br>
+                        <input type="text" id="dinner_time_id" name="dinner_time_id" value=""><br>
+                        <label for="setting">Setting:</label><br>
+                        <input type="text" id="setting" name="setting" value=""><br>
+                        <label for="value">Value:</label><br>
+                        <input type="text" id="value" name="value" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="set_setting">
+                        <input type="submit" value="Set Setting">
+                    </form>
                     
                 </th>
 
@@ -434,6 +453,7 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("get_matching_users");
         attachFormSubmitEvent("set_status_of_meal_plan_entry");
         attachFormSubmitEvent("set_note");
+        attachFormSubmitEvent("set_setting");
 
 
 

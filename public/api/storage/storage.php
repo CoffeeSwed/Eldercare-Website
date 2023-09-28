@@ -53,5 +53,9 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function set_note($dinner_time_id, $owner_id, $note);
 
         public function get_note($dinner_time_id, $owner_id);
+
+        public function get_settings_for_dinner_time($dinner_time_id, $owner_id) : array;
+
+        public function save_settings_for_dinner_time($dinner_time_id, $owner_id,?array $arr);
     }
 ?>

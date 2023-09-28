@@ -17,7 +17,7 @@ class Mysql implements Storage{
         $this->setLock_count($this->getLock_count() + 1);
         if($this->getLock_count() == 1){
             $this->send_query("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE,
-            notes_for_dinner_times WRITE");
+            notes_for_dinner_times WRITE, dinner_times_settings_for_users WRITE");
             
         }
         $this->cache_flush();
@@ -271,6 +271,10 @@ class Mysql implements Storage{
             $this->send_query($sql,false);
 
             $sql = "DELETE FROM notes_for_dinner_times WHERE owner=".$this->encodetostr($id);
+
+            $this->send_query($sql,false);
+
+            $sql = "DELETE FROM dinner_times_settings_for_users WHERE owner=".$this->encodetostr($id);
 
             $this->send_query($sql,false);
 
@@ -643,10 +647,41 @@ class Mysql implements Storage{
             $meal_plan->setId($row["id"]);
             $meal_plan->setHas_eaten(intval($row["has_eaten"]));
             $meal_plan->setNote($this->get_note($meal_plan->getDimmer_time(),$meal_plan->getOwnerId()));
+            
+            $settings = $this->get_settings_for_dinner_time($meal_plan->getDimmer_time(),$meal_plan->getOwnerID());
+            $meal_plan->setShow_note($settings["show_note"]);
+            $meal_plan->setEnabled($settings["enabled"]);
+            $meal_plan->setShow_meal_types($settings["show_meal_types"]);
+            
 
         }
         
         return $meal_plan;
+    }
+
+    public function get_settings_for_dinner_time($dinner_time_id, $owner_id) : array{
+        $arr = array("show_note" => false, "show_meal_types" => true, "enabled" => true);
+        $res = $this->fetch_table("dinner_times_settings_for_users",array("*"),array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
+        if(count($res) != 0){
+            $res = $res[0];
+            $arr["show_note"] = $res["show_note"] == "1";
+            $arr["show_meal_types"] = $res["show_meal_types"] == "1";
+            $arr["enabled"] = $res["enabled"] == "1";
+
+        }
+        return $arr;
+    }
+
+    public function save_settings_for_dinner_time($dinner_time_id, $owner_id,?array $arr){
+        $res = $this->fetch_table("dinner_times_settings_for_users",array("*"),array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
+        $arr["owner"] = $owner_id;
+        $arr["dinner_time"] = $dinner_time_id;
+        if(count($res) != 0){
+            $this->save_table("dinner_times_settings_for_users",$arr,array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
+        }
+        else{
+            $this->insert_table("dinner_times_settings_for_users",$arr);
+        }
     }
 
     public function load_meal_plan_entries($owner_id,$date) : array{
