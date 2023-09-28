@@ -352,7 +352,7 @@
                 if($dinner_time != null){
                     if($this->has_permission("set_note",$owner)){
                         $this->getDinnersInstance()->setNote($dinner_time,$owner,$note);
-                        return push_response(STATUS_OK,array("note" => ($note == null ? "" : $note)));
+                        return push_response(STATUS_OK,array("value" => ($note == null ? "" : $note)));
                     }
                     return push_response(STATUS_ERROR,PERMISSION_DENIED);
                 }
