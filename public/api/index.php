@@ -229,7 +229,7 @@
 
 		if(get_argument(ACTION) == SET_SETTING){
 			$val = get_argument("value");
-			if($val == "True" || $val == "1" || $val == "true" || $val == true)
+			if($val == "True" || $val == "1" || $val == "true")
 				$val = true;
 			else
 				$val = false;
