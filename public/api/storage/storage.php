@@ -49,5 +49,9 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function load_meal_plan_entries($owner_id,$date);
 
         public function get_matching_users(User $user) : array;
+
+        public function set_note($dinner_time_id, $owner_id, $note);
+
+        public function get_note($dinner_time_id, $owner_id);
     }
 ?>

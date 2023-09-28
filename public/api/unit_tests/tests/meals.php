@@ -102,6 +102,36 @@
         }
         $this->addEntry(new Unit_Test_Entry("LoadMealPLantEntry",STATUS_OK,"Could load a meal plan!"));
 
+        $note = $meal_plan_entry->getNote();
+        if($note != ""){
+            $this->addEntry(new Unit_Test_Entry("LoadNote",STATUS_ERROR,"Note was not empty when it should be!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("LoadNote",STATUS_OK,"Note was empty when it should be!"));
+        $dinner_time = $dinner->get_dinner_time_by_id($meal_entry_loaded->getDimmer_time());
+        $dinner->setNote($dinner_time,$user,"Hejsan där!");
+
+        $meal_plan_entry = $dinner->loadMealPlanEntry(null,null,null,$dinner->loadMealPlanEntriesForUser($user)[0]->getId());
+        $note = $meal_plan_entry->getNote();
+        if($note == ""){
+            $this->addEntry(new Unit_Test_Entry("SetNote",STATUS_ERROR,"Note was empty when it should be!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("SetNote",STATUS_OK,"Note was not empty when it shouldn't be!"));
+        $dinner->setNote($dinner_time,$user,"");
+
+        $meal_plan_entry = $dinner->loadMealPlanEntry(null,null,null,$dinner->loadMealPlanEntriesForUser($user)[0]->getId());
+        $note = $meal_plan_entry->getNote();
+        if($note != ""){
+            $this->addEntry(new Unit_Test_Entry("SetNote",STATUS_ERROR,"Note was not empty when it should be!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("SetNote",STATUS_OK,"Note was empty when it should be!"));
+
+
     }
 }
 

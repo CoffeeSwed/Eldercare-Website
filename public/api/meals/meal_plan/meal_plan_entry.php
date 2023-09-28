@@ -16,6 +16,8 @@
 
 		private $day;
 
+		private $note;
+
 
 
 	/**
@@ -70,13 +72,14 @@
 		return $this;
 	}
 
-    public function __construct(string $dinner_time_id, array $to_eat, string $owner_id=null, $day=null){
+    public function __construct(string $dinner_time_id, array $to_eat, string $owner_id=null, $day=null, $note=null){
         $this->setDimmer_time($dinner_time_id);
         $this->setMeal_types($to_eat);
         $this->setHas_eaten(false);
 		$this->setId(null);
 		$this->setOwnerID($owner_id);
 		$this->setDay(get_date_by_str($day,date("Y/m/d")));
+		$this->setNote($note);
 	}
 
 	public function to_array() : array{
@@ -90,6 +93,9 @@
 		$arr["date"] = $this->getDay() != null ? $this->getDay() : null;
 
 		$arr["has_eaten"] = $this->getHas_eaten() ? true : false;
+
+
+		$arr["note"] = $this->getNote() == null ? "" : $this->getNote();
 
 		$arr["meal_types"] = array();
 		foreach($this->getMeal_types() as $meal_type){
@@ -152,5 +158,15 @@
 		$this->owner = $owner;
 		return $this;
 	}
+
+	public function getNote() : ?string{
+		return $this->note;
+	}
+
+	public function setNote(?string $note) {
+		$this->note = $note;
+	}
+
+	
 }
 ?>

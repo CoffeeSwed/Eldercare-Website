@@ -89,5 +89,6 @@ class Dinner_Time{
 		$arr["when"] = $this->getWhen();
 		return $arr;
 	}
+
 }
 ?>

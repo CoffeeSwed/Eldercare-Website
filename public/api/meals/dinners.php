@@ -157,6 +157,7 @@ class Dinners{
 
 	}
 
+	
 	public function loadMealPlanEntry(?Dinner_Time $when,?User $owner,?string $date = null,$id = null){
 		
 		if($date != null){
@@ -189,6 +190,13 @@ class Dinners{
 		}
 
 	}
+
+	public function setNote(Dinner_Time $time, User $user,?string $note){
+		if($note == null)
+			$note = "";
+		$this->getStorage()->set_note($time->getId(),$user->getId(),$note);
+	}
+	
 
 }
 

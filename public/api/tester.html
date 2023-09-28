@@ -216,6 +216,23 @@
                         <input type="submit" value="Get session user info">
                     </form>
 
+                    <form name="set_note" id="set_note" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="dinner_time_id">Dinner time id:</label><br>
+                        <input type="text" id="dinner_time_id" name="dinner_time_id" value=""><br>
+                        <label for="note">Note:</label><br>
+                        <input type="text" id="note" name="note" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="set_note">
+                        <input type="submit" value="Set note">
+                    </form>
+
                     <form name="get_meal_plan" id="get_meal_plan" method="post" action="./index.php">
                         <label for="username">username:</label><br>
                         <input type="text" id="username" name="username" value=""><br>
@@ -416,6 +433,7 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("get_dinner_time_information");
         attachFormSubmitEvent("get_matching_users");
         attachFormSubmitEvent("set_status_of_meal_plan_entry");
+        attachFormSubmitEvent("set_note");
 
 
 

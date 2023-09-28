@@ -16,7 +16,7 @@
 	define("NOT_A_CHILD","NOT_A_CHILD");
 	define("UNIT_TEST_PASSED","UNIT_TEST_PASSED");
 	define("NO_DATA_FOUND_FOR_DATE","NO_DATA_FOUND_FOR_DATE");
-	
+	define("NO_DINNER_TIME_FOUND","NO_DINNER_TIME_FOUND");
 	/*Different statuses */
 	define("STATUS_OK","OK");
 	define("STATUS_WARNING","WARNING");
@@ -37,6 +37,7 @@
 	define("GET_MEAL_DATABASE","get_meal_types");
 	define("GET_DINNER_TIMES_DATABASE","get_dinner_times");
 	define("GET_MATCHING_USERS","get_matching_users");
+	define("SET_NOTE","set_note");
 
 	define("IS_VALID_SESSION","is_valid_session");
 	define("GET_SESSION_USER_INFO","get_session_user_info");

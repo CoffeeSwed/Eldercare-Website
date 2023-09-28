@@ -16,7 +16,8 @@ class Mysql implements Storage{
     private function lock(){
         $this->setLock_count($this->getLock_count() + 1);
         if($this->getLock_count() == 1){
-            $this->send_query("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE");
+            $this->send_query("LOCK TABLES users WRITE, sessions WRITE, relations WRITE, meal_plan_entry WRITE,
+            notes_for_dinner_times WRITE");
             
         }
         $this->cache_flush();
@@ -267,6 +268,10 @@ class Mysql implements Storage{
             
             $sql = "DELETE FROM users WHERE id=".$this->encodetostr($id);
             
+            $this->send_query($sql,false);
+
+            $sql = "DELETE FROM notes_for_dinner_times WHERE owner=".$this->encodetostr($id);
+
             $this->send_query($sql,false);
 
             $sql = "DELETE FROM meal_plan_entry WHERE owner=".$this->encodetostr($id);
@@ -637,6 +642,8 @@ class Mysql implements Storage{
             $meal_plan = new Meal_Plan_Entry($row["at"],json_decode($row["meal_types"]),$row["owner"],$row["date"]);
             $meal_plan->setId($row["id"]);
             $meal_plan->setHas_eaten(intval($row["has_eaten"]));
+            $meal_plan->setNote($this->get_note($meal_plan->getDimmer_time(),$meal_plan->getOwnerId()));
+
         }
         
         return $meal_plan;
@@ -653,9 +660,8 @@ class Mysql implements Storage{
         foreach($res as $row){
             $meal_plan = null;
             $meal_plan = new Meal_Plan_Entry($row["at"],json_decode($row["meal_types"]),$row["owner"],$row["date"]);
-            $meal_plan->setId($row["id"]);
-            $meal_plan->setHas_eaten(intval($row["has_eaten"]));
-            array_push($arr,$meal_plan);
+           
+            array_push($arr,$this->load_meal_plan_entry(null,null,null,$row["id"]));
         }
         $this->getMeals_cache()[$owner_id] = array();
         $this->getMeals_cache()[$owner_id][$date] = $arr;
@@ -714,6 +720,36 @@ class Mysql implements Storage{
 
         return $arr; 
     }
+
+    public function set_note($dinner_time_id, $owner_id, $note){
+        $this->lock();
+        $gotten = $this->get_note($dinner_time_id,$owner_id);
+        $arr = array("owner" => $owner_id, "dinner_time" => $dinner_time_id, "note" => $note);
+        if($gotten != ""){
+            if($note == "" || $note == null){
+                $sql = "DELETE FROM notes_for_dinner_times WHERE owner=".$this->encodetostr($owner_id) ." AND dinner_time=".$this->encodetostr($dinner_time_id);
+                $this->send_query($sql,false);
+            }else{
+                $this->save_table("notes_for_dinner_times",$arr,array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
+            }
+        }else{
+            if($note != null && $note != "")
+                $this->insert_table("notes_for_dinner_times",$arr);
+        }
+        $this->unlock();
+    }
+
+    public function get_note($dinner_time_id, $owner_id){
+        $to_request = array("owner" => $owner_id, "dinner_time" => $dinner_time_id);
+        $res = $this->fetch_table("notes_for_dinner_times", array("*"),$to_request);
+        if(count($res) != 0){
+            $row = $res[0];
+            return $row["note"];
+        }
+        return "";
+    }
+
+
     
 }
 

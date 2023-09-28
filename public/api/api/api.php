@@ -344,5 +344,21 @@
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
         }
     }
+
+    public function setNote($dinner_time_id,User $owner,$note){
+            $owner = $this->getStorage()->load_user($owner->GetID(),$owner->getUsername());
+            if($owner != null){
+                $dinner_time = $this->getDinnersInstance()->get_dinner_time_by_id($dinner_time_id);
+                if($dinner_time != null){
+                    if($this->has_permission("set_note",$owner)){
+                        $this->getDinnersInstance()->setNote($dinner_time,$owner,$note);
+                        return push_response(STATUS_OK,array("note" => $note));
+                    }
+                    return push_response(STATUS_ERROR,PERMISSION_DENIED);
+                }
+                return push_response(STATUS_ERROR,NO_DINNER_TIME_FOUND);
+            }
+            return push_response(STATUS_ERROR,USER_NOT_FOUND);
+    }
 }
 ?>
