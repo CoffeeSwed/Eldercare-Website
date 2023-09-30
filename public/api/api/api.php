@@ -281,7 +281,7 @@
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
 
         $meal_plan = $this->getDinnersInstance()->loadMealPlanEntriesForUser($user,$date);
-        if(count($meal_plan) != count($this->getDinnersInstance()->getDinners())){
+        if(count($meal_plan) == 0){
             
             //strtotime returns time in seconds! 
             if(strtotime(get_date_today()) <= strtotime($date) && (strtotime($date) - strtotime(get_date_today()) <= get_cfg_val("max_pre_generating_days")*3600*24)){

@@ -676,6 +676,11 @@ class Mysql implements Storage{
         $res = $this->fetch_table("dinner_times_settings_for_users",array("*"),array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
         $arr["owner"] = $owner_id;
         $arr["dinner_time"] = $dinner_time_id;
+        foreach(array_keys($arr) as $key){
+            if(!$arr[$key]){
+				$arr[$key] = "0";
+            }
+        }
         if(count($res) != 0){
             $this->save_table("dinner_times_settings_for_users",$arr,array("owner" => $owner_id, "dinner_time" => $dinner_time_id));
         }

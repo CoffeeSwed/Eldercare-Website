@@ -181,12 +181,19 @@ class Dinners{
 		return $this->getStorage()->load_meal_plan_entries($user->getId(),$date);
 	}
 
+	public function isDinnerTimeEnabled(User $user, Dinner_Time $dinner_Time){
+		$setts = $this->getStorage()->get_settings_for_dinner_time($dinner_Time->getId(),$user->getId());
+		return $setts["enabled"];
+	}
+
 	public function generateMealPlanEntriesForTheDay(User $user, string $date = null){
 		$date = get_date_by_str($date,date("Y/m/d"));
 		foreach($this->getDinners() as $dinner){
-			$meal = $this->generateMealPlanEntry($dinner,$user);
-			$meal->setDay($date);
-			$this->saveMealPlanEntry($meal);
+			if($this->isDinnerTimeEnabled($user,$dinner)){
+				$meal = $this->generateMealPlanEntry($dinner,$user);
+				$meal->setDay($date);
+				$this->saveMealPlanEntry($meal);
+			}
 		}
 
 	}
@@ -204,11 +211,7 @@ class Dinners{
 	public function setSetting(Dinner_Time $time, User $user,string $setting, bool $val){
 		$settings = $this->getStorage()->get_settings_for_dinner_time($time->getId(),$user->getId());
 		$settings[$setting] = $val;
-		foreach(array_keys($settings) as $key){
-            if(!$settings[$key]){
-				$settings[$key] = "0";
-            }
-        }
+		
 		$this->getStorage()->save_settings_for_dinner_time($time->getId(),$user->getId(),$settings);
 	}
 
