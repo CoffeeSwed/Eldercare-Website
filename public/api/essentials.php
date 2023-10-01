@@ -38,6 +38,8 @@
 	define("GET_DINNER_TIMES_DATABASE","get_dinner_times");
 	define("GET_MATCHING_USERS","get_matching_users");
 	define("SET_NOTE","set_note");
+	define("GET_EATEN","get_amount_of_eaten");
+
 
 	define("IS_VALID_SESSION","is_valid_session");
 	define("GET_SESSION_USER_INFO","get_session_user_info");
@@ -112,6 +114,9 @@
 	}
 
 	function get_date_by_str($str,$basetime){
+		if($basetime == null){
+			$basetime = date("Y/m/d");
+		}
 		if($str != null){
 			if(strtotime($str)){
 				if($date = getDate(strtotime($str))){

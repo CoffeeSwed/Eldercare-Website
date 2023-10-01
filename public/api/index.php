@@ -236,11 +236,14 @@
 			echo($api->setSetting(get_argument("dinner_time_id"),$user,get_argument("setting"),$val));
 		}
 
+		if(get_argument(ACTION) == GET_EATEN){
+			echo($api->getEaten(get_argument("dinner_time_id"),$user,get_argument("start_date"),get_argument("end_date")));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}
 		
-
 		$api->getStorage()->close();
 	}
 	answer_requests();

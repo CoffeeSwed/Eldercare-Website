@@ -378,5 +378,27 @@
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
 
+    public function getEaten($dinner_time_id, User $owner, ?String $start, ?String $end){
+        $owner = $this->getStorage()->load_user($owner->GetID(),$owner->getUsername());
+
+        if($owner != null){
+            $dinner_time = $this->getDinnersInstance()->get_dinner_time_by_id($dinner_time_id);
+            if($dinner_time != null){
+                if($this->has_permission("get_meal_plan_of",$owner)){
+                    $start = get_date_by_str($start,null);
+                    $end = get_date_by_str($start,null);
+                    $res = $this->getDinnersInstance()->getStats($dinner_time,$owner,$start,$end);
+                    
+
+                    return push_response(STATUS_OK,array("eaten" => $res["eaten"], "total"=> $res["not_eaten"]));
+                }
+                return push_response(STATUS_ERROR,PERMISSION_DENIED);
+            }
+            return push_response(STATUS_ERROR,NO_DINNER_TIME_FOUND);
+        }
+        return push_response(STATUS_ERROR,USER_NOT_FOUND);
+    }
+    
+
 }
 ?>
