@@ -160,7 +160,24 @@
         
         $this->addEntry(new Unit_Test_Entry("SetSettings",STATUS_OK,"Settings for meal entry was equal to given settings!"));
 
-
+        $meal_entry->setHas_eaten(true);
+        $dinner->saveMealPlanEntry($meal_entry);
+        $meal_entry = $dinner->loadMealPlanEntry($dinner_time,null,null,$meal_entry->getId());
+        if($meal_entry == null){
+            $this->addEntry(new Unit_Test_Entry("setEaten",STATUS_ERROR,"Meal was not eaten when it should be!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("setEaten",STATUS_OK,"Meal was eaten when it should be!"));
+        
+        $stats = $dinner->getStats($dinner_time,$user,"1800-01-01",get_date_today());
+        if($stats["eaten"] == 0){
+            $this->addEntry(new Unit_Test_Entry("getTotalEaten",STATUS_ERROR,"Get stats returned wrong value!"));
+            $this->setStatus(STATUS_ERROR);
+            return;
+        }
+        $this->addEntry(new Unit_Test_Entry("getTotalEaten",STATUS_OK,"Get stats returned correct value!"));
+        //print_r($stats);
     }
 }
 

@@ -44,8 +44,7 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
 
         public function save_meal_plan_entry(Meal_Plan_Entry& $meal_plan_entry);
 
-        public function load_meal_plan_entry($owner_id, $dinner_time_id,$date,$id=null) : ?Meal_Plan_Entry;
-
+        public function load_meal_plan_entry(?String $owner_id,?String $dinner_time_id,?String $date,$id=null) : ?Meal_Plan_Entry;
         public function load_meal_plan_entries($owner_id,$date);
 
         public function get_matching_users(User $user) : array;
@@ -57,5 +56,10 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function get_settings_for_dinner_time($dinner_time_id, $owner_id) : array;
 
         public function save_settings_for_dinner_time($dinner_time_id, $owner_id,?array $arr);
+
+        public function get_eaten($dinner_time_id,$owner_id,string $start, string $end) : int;
+
+        public function get_not_eaten($dinner_time_id,$owner_id,string $start, string $end) : int;
+        
     }
 ?>

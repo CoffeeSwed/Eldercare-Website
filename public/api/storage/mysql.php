@@ -38,7 +38,7 @@ class Mysql implements Storage{
     }
 
     private function send_query($str,$multi_query = false){
-        //echo("Query!");
+        //echo($str."\n");
         
             if(!$multi_query)
             return $this->getConn()->query($str);
@@ -91,10 +91,20 @@ class Mysql implements Storage{
         $query = $query." FROM ".$table_name;
         for($i = 0; $i < count(array_keys($where)); $i++){
             if($i == 0){
-                $query=$query." WHERE ".array_keys($where)[$i]."=".$this->encodetostr($where[array_keys($where)[$i]]);
-            }else{
-                $query=$query." AND ".array_keys($where)[$i]."=".$this->encodetostr($where[array_keys($where)[$i]]);
+                if(!is_array($where[array_keys($where)[$i]])){
+                    $query=$query." WHERE ".array_keys($where)[$i]."=".$this->encodetostr($where[array_keys($where)[$i]]);
+                }else{
+                    $val = $where[array_keys($where)[$i]];
+                    $query = $query ." WHERE ".$val["name"] . " ".$val["operator"] . " ".$this->encodetostr($val["value"]);
 
+                }
+            }else{
+                if(!is_array($where[array_keys($where)[$i]])){
+                    $query=$query." AND ".array_keys($where)[$i]."=".$this->encodetostr($where[array_keys($where)[$i]]);
+                }else{
+                    $val = $where[array_keys($where)[$i]];
+                    $query = $query ." AND ".$val["name"] . " ".$val["operator"] . " ".$this->encodetostr($val["value"]);
+                }
             }
         }
         if($end_tag != ""){
@@ -624,7 +634,7 @@ class Mysql implements Storage{
         $this->unlock();
     }
 
-    public function load_meal_plan_entry($owner_id, $dinner_time_id,$date,$id=null) : ?Meal_Plan_Entry{
+    public function load_meal_plan_entry(?String $owner_id,?String $dinner_time_id,?String $date,$id=null) : ?Meal_Plan_Entry{
        
         $meal_plan = null;
         $to_request = array();
@@ -787,6 +797,46 @@ class Mysql implements Storage{
             return $row["note"];
         }
         return "";
+    }
+    
+    public function get_eaten($dinner_time_id,$owner_id,string $start, string $end) : int{
+        $results = $this->fetch_table("meal_plan_entry",array("COUNT(id) AS total"),array(
+            "has_eaten" => "1",
+            "owner" => $owner_id,
+            "at" => $dinner_time_id,
+            array(
+                "name" => "date",
+                "operator" => ">=",
+                "value" => $start
+            ),
+            array(
+                "name" => "date",
+                "operator" => "<=",
+                "value" => $end
+            )
+        ));
+        
+        return $results[0]["total"];
+    }
+
+    public function get_not_eaten($dinner_time_id,$owner_id,string $start, string $end) : int{
+        $results = $this->fetch_table("meal_plan_entry",array("COUNT(id) AS total"),array(
+            "has_eaten" => "0",
+            "owner" => $owner_id,
+            "at" => $dinner_time_id,
+            array(
+                "name" => "date",
+                "operator" => ">=",
+                "value" => $start
+            ),
+            array(
+                "name" => "date",
+                "operator" => "<=",
+                "value" => $end
+            )
+        ));
+        
+        return $results[0]["total"];
     }
 
 

@@ -215,6 +215,19 @@ class Dinners{
 		$this->getStorage()->save_settings_for_dinner_time($time->getId(),$user->getId(),$settings);
 	}
 
+	public function getStats(Dinner_Time $time, User $user, String $start,String $end ){
+		$arr = array();
+		$arr["eaten"] = 0;
+		$arr["not_eaten"] = 0;
+		$start = get_date_by_str($start,date("Y/M/D"));
+		$end = get_date_by_str($end,date("Y/M/D"));
+
+		$arr["eaten"] = $this->getStorage()->get_eaten($time->getId(),$user->getId(),$start,$end);
+		$arr["not_eaten"] = $this->getStorage()->get_not_eaten($time->getId(),$user->getId(),$start,$end);
+		return $arr;
+	}
+
+
 }
 
 ?>
