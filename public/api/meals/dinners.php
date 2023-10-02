@@ -66,6 +66,8 @@ class Dinners{
         $this->getStorage()->cache_flush();
 
 		$this->setDinners($this->getStorage()->load_dinners());
+
+		$this->sortDinnerTimes();
 		
     }
 
@@ -186,8 +188,20 @@ class Dinners{
 		return $setts["enabled"];
 	}
 
+	public function sortDinnerTimes(){
+		usort($this->dinners,function($a,$b){
+			$ad = new DateTime($a->getWhen());
+			$bd = new DateTime($b->getWhen());
+			if($ad == $bd)
+				return 0;
+
+			return $ad < $bd ? -1 : 1;
+		});
+	}
+
 	public function generateMealPlanEntriesForTheDay(User $user, string $date = null){
 		$date = get_date_by_str($date,date("Y/m/d"));
+		
 		foreach($this->getDinners() as $dinner){
 			if($this->isDinnerTimeEnabled($user,$dinner)){
 				$meal = $this->generateMealPlanEntry($dinner,$user);
