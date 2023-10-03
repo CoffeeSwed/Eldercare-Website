@@ -126,7 +126,7 @@
             
                  $user->add_parent($user2->getId());
                  $this->getStorage()->save_user($user);
-                 return push_response(STATUS_OK,PARENT_UPDATED);
+                 return push_response(STATUS_OK,array("message" => PARENT_UPDATED));
 
         }else{
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
@@ -142,15 +142,14 @@
 		$user2 = $this->getStorage()->load_user($user2->getId(),$user2->getUsername());
         if($user != null && $user2 != null && $creator != null){
 
-            
-            if($this->has_permission("delete_parent_to",$user))
+            if(!$this->has_permission("delete_parent_to",$user))
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
 
             
             $user->delete_parent($user2->getId());
             $this->getStorage()->save_user($user);
 
-            return push_response(STATUS_OK,PARENT_UPDATED);
+            return push_response(STATUS_OK,array("message" => PARENT_UPDATED));
 
         }else{
             return push_response(STATUS_ERROR,USER_NOT_FOUND);
