@@ -216,7 +216,20 @@
 		}
 
 		if(get_argument(ACTION) == GET_MATCHING_USERS){
-			echo($api->get_matching_users($user));
+			$offset = intval(get_argument("offset"));
+			$amount = intval(get_argument("amount"));
+			if($offset < 0){
+				$offset = 0;
+			}
+			if($amount < 1){
+				$amount = 1;
+			}
+			if($amount > get_cfg_val("max_matching_users")){
+				$amount = intval(get_cfg_val("max_matching_users"));
+			}
+
+			
+			echo($api->get_matching_users($user,$offset,$amount));
 		}
 
 		if(get_argument(ACTION) == SET_STATUS_OF_MEAL_PLAN_ENTRY){

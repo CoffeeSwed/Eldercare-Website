@@ -738,7 +738,7 @@ class Mysql implements Storage{
         $this->meals_plan_cache = array();
     }
 
-    public function get_matching_users(User $user) : array{
+    public function get_matching_users(User $user, int $offset, int $amount) : array{
         $arr = array();
         
         $where = array();
@@ -763,8 +763,11 @@ class Mysql implements Storage{
             $where["contact_number"] = $user->getContact_number();
 
         }
-
-        foreach($this->fetch_table("users",array("id"),$where,"","DISTINCT") as $row){
+        $endtag = "";
+        $endtag = $endtag."LIMIT ".strval($amount)." OFFSET ".strval($offset);
+            
+        
+        foreach($this->fetch_table("users",array("id"),$where,$endtag,"DISTINCT") as $row){
             array_push($arr,$row["id"]);
         }
 

@@ -300,9 +300,9 @@
         
     }
 
-    public function get_matching_users(User $user){
+    public function get_matching_users(User $user,$offset = 0, $amount = 100){
         if($this->has_permission("list_matching_users",$user)){
-            return push_response(STATUS_OK,array("id" => $this->getStorage()->get_matching_users($user)));
+            return push_response(STATUS_OK,array("id" => $this->getStorage()->get_matching_users($user,$offset,$amount)));
         }else{
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
         }
