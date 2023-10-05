@@ -240,6 +240,10 @@
 			echo($api->getEaten(get_argument("dinner_time_id"),$user,get_argument("start_date"),get_argument("end_date")));
 		}
 
+		if(get_argument(ACTION) == DOES_USER_EXIST){
+			echo($api->doesUserExist($user));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}

@@ -49,6 +49,7 @@
 	define("UNIT_TEST","unit_test");
 	define("SET_STATUS_OF_MEAL_PLAN_ENTRY","set_status_of_meal_plan_entry");
 	define("SET_SETTING","set_setting");
+	define("DOES_USER_EXIST","does_user_exist");
 
 	define("ACTION","action");
 

@@ -397,6 +397,15 @@
         }
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
+
+    public function doesUserExist(User $user){
+        if($this->has_permission("does_user_exist",null)){
+            $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+            return push_response(STATUS_OK,array("does_exist" => $user != null));
+        }else{
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
+        }
+    }
     
 
 }

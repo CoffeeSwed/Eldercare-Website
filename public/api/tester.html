@@ -165,6 +165,18 @@
                         <input type="hidden" id="action" name="action" value="delete_user">
                         <input type="submit" value="Delete user">
                     </form>
+                    <form name="does_user_exist" id="does_user_exist" method="post" action="./index.php">
+                        <label for="username">username:</label><br>
+                        <input type="text" id="username" name="username" value=""><br>
+                        <label for="id">id:</label><br>
+                        <input type="text" id="id" name="id" value=""><br>
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="key">Key:</label><br>
+                        <input type="text" id="key" name="key" value=""><br>
+                        <input type="hidden" id="action" name="action" value="does_user_exist">
+                        <input type="submit" value="Does user exist?">
+                    </form>
 
                     <form name="get_user_info" id="get_user_info" method="post" action="./index.php">
                         <label for="username">username:</label><br>
@@ -479,6 +491,7 @@ Object.prototype.prettyPrint = function(){
         attachFormSubmitEvent("set_status_of_meal_plan_entry");
         attachFormSubmitEvent("set_note");
         attachFormSubmitEvent("set_setting");
+        attachFormSubmitEvent("does_user_exist");
 
 
 
