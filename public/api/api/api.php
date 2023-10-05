@@ -302,7 +302,7 @@
 
     public function get_matching_users(User $user){
         if($this->has_permission("list_matching_users",$user)){
-            return push_response(STATUS_OK,$this->getStorage()->get_matching_users($user));
+            return push_response(STATUS_OK,array("id" => $this->getStorage()->get_matching_users($user)));
         }else{
             return push_response(STATUS_ERROR,PERMISSION_DENIED);
         }
