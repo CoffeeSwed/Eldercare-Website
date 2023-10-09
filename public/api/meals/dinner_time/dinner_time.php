@@ -89,6 +89,17 @@ class Dinner_Time{
 		$arr["when"] = $this->getWhen();
 		return $arr;
 	}
+
+	public function getMinutesSinceShouldBeEaten(DateTimeImmutable $time){
+		$us = new DateTimeImmutable("now",$time->getTimezone());
+		$datein = new DateTimeImmutable($this->getWhen(),$time->getTimezone());
+		$hours = (int)$us->format("H") - (int)$datein->format("H");
+		$minutes = (int)$us->format("i") - (int)$datein->format("i");
+		return $hours*60 + $minutes;
+		
+
+		
+	}
 	
 
 }

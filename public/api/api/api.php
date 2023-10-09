@@ -407,6 +407,21 @@
         }
     }
     
+    public function getDinnerTimeValues($dinner_time_id,User $owner,$setting){
+        $owner = $this->getStorage()->load_user($owner->GetID(),$owner->getUsername());
+
+        if($owner != null){
+            $dinner_time = $this->getDinnersInstance()->get_dinner_time_by_id($dinner_time_id);
+            if($dinner_time != null){
+                if($this->has_permission("get_settings_for_dinner_time",$owner)){
+                    return push_response(STATUS_OK,$this->getDinnersInstance()->getSettings($dinner_time,$owner));
+                }
+                return push_response(STATUS_ERROR,PERMISSION_DENIED);
+            }
+            return push_response(STATUS_ERROR,NO_DINNER_TIME_FOUND);
+        }
+        return push_response(STATUS_ERROR,USER_NOT_FOUND);
+    }
 
 }
 ?>

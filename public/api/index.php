@@ -6,10 +6,10 @@
 	include_once("./api/api.php");
 	include_once("./unit_tests/tests/mysql.php");
 	include_once("./unit_tests/tests/meals.php");
-
+	include_once("./unit_tests/tests/notifications.php");
 
 	// Start the session
-	
+	date_default_timezone_set(get_cfg_val("time_zone"));
 	
 
 
@@ -31,6 +31,8 @@
 			$results[$mysql->getName()] = $mysql->to_array();
 			$meals = new Unit_Test_Meals();
 			$results[$meals->getName()] = $meals->to_array();
+			$notifications = new Unit_Test_Notifications();
+			$results[$notifications->getName()] = $notifications->to_array();
 
 
 			
@@ -255,6 +257,10 @@
 
 		if(get_argument(ACTION) == DOES_USER_EXIST){
 			echo($api->doesUserExist($user));
+		}
+
+		if(get_argument(ACTION) == GET_DINNER_TIME_INFO){
+			echo($api->getDinnerTimeValues(get_argument("dinner_time_id"),$user,get_argument("setting")));		
 		}
 
 		if(get_argument(ACTION) == ""){

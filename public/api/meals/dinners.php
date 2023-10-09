@@ -219,7 +219,9 @@ class Dinners{
 	}
 	
 	public function getSettings(Dinner_Time $time, User $user){
-		return $this->getStorage()->get_settings_for_dinner_time($time->getId(),$user->getId());
+		$settings = $this->getStorage()->get_settings_for_dinner_time($time->getId(),$user->getId());
+		$settings["note"] = $this->getStorage()->get_note($time->getId(),$user->getId());
+		return $settings;
 	}
 
 	public function setSetting(Dinner_Time $time, User $user,string $setting, bool $val){

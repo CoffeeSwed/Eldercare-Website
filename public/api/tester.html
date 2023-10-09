@@ -80,6 +80,21 @@
                     <input type="hidden" id="action" name="action" value="create_user">
                     <input type="submit" id="create_user_button" value="Create user">
                 </form>
+                <form name="get_dinner_time_info" id="get_dinner_time_info" method="post" action="./index.php">
+                    <label for="username">username:</label><br>
+                    <input type="text" id="username" name="username" value=""><br>
+                    <label for="id">id:</label><br>
+                    <input type="text" id="id" name="id" value=""><br>
+                    <label for="setting">Dinner time id:</label><br>
+                    <input type="text" id="dinner_time_id" name="dinner_time_id" value=""><br>
+
+                    <label for="session">Session:</label><br>
+                    <input type="text" id="session" name="session" value=""><br>
+                    <label for="key">Key:</label><br>
+                    <input type="text" id="key" name="key" value=""><br>
+                    <input type="hidden" id="action" name="action" value="get_dinner_time_info">
+                    <input type="submit" value="Get Dinner Dinner Time Info">
+                </form>
                 </th>
                 
                 <th>
@@ -475,6 +490,7 @@ Object.prototype.prettyPrint = function(){
         }
         
         attachFormSubmitEvent("create_user");
+        attachFormSubmitEvent("get_dinner_time_info");
         attachFormSubmitEvent("get_amount_of_eaten");
 
         attachFormSubmitEvent("create_session");

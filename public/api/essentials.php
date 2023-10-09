@@ -29,6 +29,7 @@
 
 	/*ACTIONS*/
 	define("CREATE_USER","create_user");
+	define("GET_DINNER_TIME_INFO","get_dinner_time_info");
 	define("DELETE_USER","delete_user");
 	define("CREATE_SESSION","create_session");
 	define("ADD_PARENT","add_parent");
@@ -132,7 +133,8 @@
 	}
 
 	function get_date_today(){
-		return get_date_by_str(date("Y/m/d"),date("Y/m/d"));
+		$today = new DateTimeImmutable("now",new DateTimeZone(get_cfg_val("time_zone")));
+		return get_date_by_str($today->format("Y/m/d"),date("Y/m/d"));
 
 	}
 		
