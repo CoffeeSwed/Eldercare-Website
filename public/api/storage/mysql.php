@@ -842,6 +842,14 @@ class Mysql implements Storage{
         return $results[0]["total"];
     }
 
+    public function getSessionKey(Session $session){
+		$results = $this->fetch_table("sessions",array("pass"),array("UuidFromBin(session)" => $session->getId()));
+        if(count($results) != 0){
+            $session->setKey($results[0]["pass"]);
+        }
+        
+	}
+
 
     
 }

@@ -422,6 +422,19 @@
         }
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
+    
+    public function getSessionKey(String $password){
+        $this->getStorage()->getSessionKey($this->getSession());
+        $client = $this->getStorage()->get_user_from_session($this->getSession());
+        if($client != null){
+            if($client->is_password($password)){
+				return push_response(STATUS_OK,array("session" => $this->getSession()->getId(), "key" => $this->getSession()->getKey()));
+            }else{
+                return push_response(STATUS_ERROR,BAD_PASSWORD);
+            }
+        }
+        return push_response(STATUS_ERROR,BAD_SESSION_ID);
+    }
 
 }
 ?>

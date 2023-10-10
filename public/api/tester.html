@@ -285,6 +285,17 @@
                         <input type="submit" value="Get session user info">
                     </form>
 
+                    <form name="get_session_key" id="get_session_key" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="password">password:</label><br>
+                        <input type="text" id="password" name="password" value=""><br>
+    
+    
+                        <input type="hidden" id="action" name="action" value="get_session_key">
+                        <input type="submit" value="Get session key">
+                    </form>
+
                     <form name="set_note" id="set_note" method="post" action="./index.php">
                         <label for="username">username:</label><br>
                         <input type="text" id="username" name="username" value=""><br>
@@ -495,6 +506,7 @@ Object.prototype.prettyPrint = function(){
 
         attachFormSubmitEvent("create_session");
         attachFormSubmitEvent("get_session_user_info");
+        attachFormSubmitEvent("get_session_key");
         attachFormSubmitEvent("get_website_config");
         attachFormSubmitEvent("add_parent");
         attachFormSubmitEvent("remove_parent");

@@ -263,6 +263,10 @@
 			echo($api->getDinnerTimeValues(get_argument("dinner_time_id"),$user,get_argument("setting")));		
 		}
 
+		if(get_argument(ACTION) == GET_SESSION_KEY){
+			echo($api->getSessionKey(get_argument("password")));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}

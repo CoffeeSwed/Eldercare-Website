@@ -60,6 +60,8 @@ define("USER_ID_ASSIGNED","USER_ID_ASSIGNED");
         public function get_eaten($dinner_time_id,$owner_id,string $start, string $end) : int;
 
         public function get_not_eaten($dinner_time_id,$owner_id,string $start, string $end) : int;
+
+        public function getSessionKey(Session $session);
         
     }
 ?>

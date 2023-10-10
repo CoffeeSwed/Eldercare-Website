@@ -39,5 +39,7 @@ class Permission{
         $this->setAllowed($allowed);
         $this->setName($name);
     }
+
+	
 }
 ?>

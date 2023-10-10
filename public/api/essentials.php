@@ -17,6 +17,9 @@
 	define("UNIT_TEST_PASSED","UNIT_TEST_PASSED");
 	define("NO_DATA_FOUND_FOR_DATE","NO_DATA_FOUND_FOR_DATE");
 	define("NO_DINNER_TIME_FOUND","NO_DINNER_TIME_FOUND");
+	define("BAD_SESSION_ID","BAD_SESSION_ID");
+	define("BAD_PASSWORD","BAD_PASSWORD");
+
 	/*Different statuses */
 	define("STATUS_OK","OK");
 	define("STATUS_WARNING","WARNING");
@@ -44,6 +47,7 @@
 
 	define("IS_VALID_SESSION","is_valid_session");
 	define("GET_SESSION_USER_INFO","get_session_user_info");
+	define("GET_SESSION_KEY","get_session_key");
 	define("GET_USER_INFO","get_user_info");
 	define("GET_WEBSITE_CFG","get_website_config");
 	define("GET_CHILDREN","get_children");
