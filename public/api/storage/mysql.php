@@ -183,7 +183,7 @@ class Mysql implements Storage{
      private function create_save_insert_array(User $user) : array{
         return array("username" => $user->getUsername(), "password" => $user->getPassword(), "type" => $user->getType(),
         "first_name" => $user->getFirst_name(), "last_name" => $user->getLast_name(), "contact_number" => $user->getContact_number(),
-        "date_of_birth" => $user->getDate_of_birth()
+        "date_of_birth" => $user->getDate_of_birth(), "pin" => $user->getPin()
      );
      }
 
@@ -340,6 +340,7 @@ class Mysql implements Storage{
             $user->setContact_number($row["contact_number"]);
             $user->setId($row["id"]);
             $user->setDate_of_birth($row["date_of_birth"]);
+            $user->setPin($row["pin"],false);
             $this->load_parents_and_children($user);
             
             $this->getUser_cache()["id"][$user->getId()] = $user;

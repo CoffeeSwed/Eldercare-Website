@@ -427,7 +427,7 @@
         $this->getStorage()->getSessionKey($this->getSession());
         $client = $this->getStorage()->get_user_from_session($this->getSession());
         if($client != null){
-            if($client->is_password($password)){
+            if($client->is_password($password) || $client->is_pin($password)){
 				return push_response(STATUS_OK,array("session" => $this->getSession()->getId(), "key" => $this->getSession()->getKey()));
             }else{
                 return push_response(STATUS_ERROR,BAD_PASSWORD);
@@ -448,6 +448,9 @@
                 }
                 if($entry == "password"){
                     $user->setPassword($value,true);
+                }
+                if($entry == "pin"){
+                    $user->setPin($value,true);
                 }
                 $this->getStorage()->save_user($user);
                 return push_response(STATUS_OK,array("User" =>$user->to_json()));

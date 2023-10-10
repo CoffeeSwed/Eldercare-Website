@@ -34,7 +34,9 @@
     }
 
     public function is_pin($pin) : bool{
+		if($this->getPin() != null && $pin != null)
         return password_verify($pin,$this->getPin());
+		return false;
     }
     
 	/**
@@ -192,7 +194,7 @@
 	 * @return self
 	 */
 	public function setPin($pin,$encrypt_pin = true): self {
-		$this->pin = $this->$encrypt_pin($pin);
+		$this->pin = $this->encrypt_password($pin);
         if(!$encrypt_pin){
             $this->pin = $pin;
         }
