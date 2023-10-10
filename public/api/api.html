@@ -96,7 +96,7 @@
             </tr>
             <tr>
                 <th>get_matching_users</th>
-                <th>Same input as create_user except sensitive information like password or etc.</th>
+                <th>Same input as create_user except sensitive information like password or etc., also offset and amount which says amount to return and offset from start of array</th>
                 <th>Returns user ids which has matching input as given!!</th>
                 <th>list_matching_users</th>
             </tr>
@@ -145,6 +145,12 @@
             <tr>
                 <th>get_eaten</th>
                 <th>username, id, dinner time id, startdate, enddate, session, key</th>
+                <th>Returns amount of meal plan entries set as eaten and how many not set to eaten!</th>
+                <th>get_meal_plan_of</th>
+            </tr>
+            <tr>
+                <th>set_status_of_meal_plan_entry</th>
+                <th> entry id, eaten, session, key</th>
                 <th>Returns amount of meal plan entries set as eaten and how many not set to eaten!</th>
                 <th>get_meal_plan_of</th>
             </tr>
