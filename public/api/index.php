@@ -267,6 +267,10 @@
 			echo($api->getSessionKey(get_argument("password")));
 		}
 
+		if(get_argument(ACTION) == UPDATE_USER){
+			echo($api->updateUser($user,get_argument("entry"),get_argument("value")));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}

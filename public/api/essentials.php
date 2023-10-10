@@ -32,6 +32,8 @@
 
 	/*ACTIONS*/
 	define("CREATE_USER","create_user");
+	define("UPDATE_USER","update_user");
+
 	define("GET_DINNER_TIME_INFO","get_dinner_time_info");
 	define("DELETE_USER","delete_user");
 	define("CREATE_SESSION","create_session");

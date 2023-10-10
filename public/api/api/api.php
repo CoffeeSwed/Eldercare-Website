@@ -385,7 +385,7 @@
             if($dinner_time != null){
                 if($this->has_permission("get_meal_plan_of",$owner)){
                     $start = get_date_by_str($start,null);
-                    $end = get_date_by_str($start,null);
+                    $end = get_date_by_str($end,null);
                     $res = $this->getDinnersInstance()->getStats($dinner_time,$owner,$start,$end);
                     
 
@@ -434,6 +434,27 @@
             }
         }
         return push_response(STATUS_ERROR,BAD_SESSION_ID);
+    }
+
+    public function updateUser(User $user,?String $entry,?String $value){
+        $user = $this->getStorage()->load_user($user->getId(),$user->getUsername());
+        if($user != null){
+            if($this->has_permission("update_user",$user)){
+                if($entry == "first_name"){
+                    $user->setFirst_name($value);
+                }
+                if($entry == "last_name"){
+                    $user->setLast_name($value);
+                }
+                if($entry == "password"){
+                    $user->setPassword($value,true);
+                }
+                $this->getStorage()->save_user($user);
+                return push_response(STATUS_OK,array("User" =>$user->to_json()));
+            }
+            return push_response(STATUS_ERROR,PERMISSION_DENIED);
+        }
+        return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
 
 }
