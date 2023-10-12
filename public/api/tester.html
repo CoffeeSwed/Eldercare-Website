@@ -169,6 +169,15 @@
                         <input type="submit" value="Add parent">
                     </form>
 
+                    <form name="get_notification" id="get_notification" method="post" action="./index.php">
+                        <label for="session">Session:</label><br>
+                        <input type="text" id="session" name="session" value=""><br>
+                        <label for="date">date:</label><br>
+                        <input type="text" id="date" name="date" value=""><br>
+                        <input type="hidden" id="action" name="action" value="get_notification">
+                        <input type="submit" value="Get notification">
+                    </form>
+
                     <form name="remove_parent" id="remove_parent" method="post" action="./index.php">
                         <label for="username">username:</label><br>
                         <input type="text" id="username" name="username" value=""><br>
@@ -526,6 +535,7 @@ Object.prototype.prettyPrint = function(){
 
         attachFormSubmitEvent("get_dinner_time_info");
         attachFormSubmitEvent("get_amount_of_eaten");
+        attachFormSubmitEvent("get_notification");
 
         attachFormSubmitEvent("create_session");
         attachFormSubmitEvent("get_session_user_info");

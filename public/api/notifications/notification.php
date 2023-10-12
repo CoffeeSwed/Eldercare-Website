@@ -1,49 +1,17 @@
 <?php
 include_once(__DIR__."/../user/user.php");
     class Notification{
-        private User $user;
 
-        private Dinner_Time $dinner_Time;
         
-        private String $swedish_message;
-        private String $english_message;
+        private ?String $swedish_message = null;
+        private ?String $english_message = null;
+
+		private ?String $criticality = NOTIFICATION_CRITICALITY_NONE;
+		private ?String $id = null;
     
-	/**
-	 * @return User
-	 */
-	public function getUser(): User {
-		return $this->user;
-	}
-	
-	/**
-	 * @param User $user 
-	 * @return self
-	 */
-	public function setUser(User $user): self {
-		$this->user = $user;
-		return $this;
-	}
 
-	/**
-	 * @return Dinner_Time
-	 */
-	public function getDinner_Time(): Dinner_Time {
-		return $this->dinner_Time;
-	}
-	
-	/**
-	 * @param Dinner_Time $dinner_Time 
-	 * @return self
-	 */
-	public function setDinner_Time(Dinner_Time $dinner_Time): self {
-		$this->dinner_Time = $dinner_Time;
-		return $this;
-	}
 
-	/**
-	 * @return string
-	 */
-	public function getSwedish_message(): string {
+	public function getSwedish_message(): ?String {
 		return $this->swedish_message;
 	}
 	
@@ -56,10 +24,8 @@ include_once(__DIR__."/../user/user.php");
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getEnglish_message(): string {
+	
+	public function getEnglish_message(): ?String {
 		return $this->english_message;
 	}
 	
@@ -71,5 +37,76 @@ include_once(__DIR__."/../user/user.php");
 		$this->english_message = $english_message;
 		return $this;
 	}
+
+	public function to_array(){
+		$arr = array();
+		$arr["swedish_message"] = $this->getSwedish_message();
+		$arr["english_message"] = $this->getEnglish_message();
+		$arr["uuid"] = $this->getId();
+		$arr["criticality"] = $this->getCriticality();
+
+		return $arr;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getId(): ?String {
+		return $this->id;
+	}
+	
+	
+	public function setId(string $id): self {
+		$this->id = $id;
+		return $this;
+	}
+
+	
+	public function getCriticality(): ?String {
+		return $this->criticality;
+	}
+	
+	/**
+	 * @param string $criticality 
+	 * @return self
+	 */
+	public function setCriticality(string $criticality): self {
+		$this->criticality = $criticality;
+		
+		return $this;
+	}
+
+	public function __construct(){
+	}
+
+	public function getCriticalityInteger():int {
+		if($this->getCriticality() == NOTIFICATION_CRITICALITY_FATAL)
+		return 5;
+		if($this->getCriticality() == NOTIFICATION_CRITICALITY_HIGH)
+		return 4;
+		if($this->getCriticality() == NOTIFICATION_CRITICALITY_MEDIUM)
+		return 3;
+		if($this->getCriticality() == NOTIFICATION_CRITICALITY_LOW)
+		return 2;
+		if($this->getCriticality() == NOTIFICATION_CRITICALITY_NOW)
+		return 1;
+		return 0;
+	}
+
+	public function isMoreCriticalThan(?String $str) : bool{
+		if($str == null)
+			return true;
+		$noti = new Notification();
+		$noti->setCriticality($str);
+		return $this->isMoreCritical($noti);
+	}
+
+	public function isMoreCritical(?Notification $notification) : bool{
+		if($notification == null)
+			return true;
+		return $this->getCriticalityInteger() > $notification->getCriticalityInteger();
+	}
+
+	
 }
 ?>

@@ -271,6 +271,10 @@
 			echo($api->updateUser($user,get_argument("entry"),get_argument("value")));
 		}
 
+		if(get_argument(ACTION) == GET_NOTIFICATION){
+			echo($api->getNotification(get_argument("session"),get_argument("date")));
+		}
+
 		if(get_argument(ACTION) == ""){
 			echo(push_response(STATUS_ERROR,MISSING_INPUT));
 		}

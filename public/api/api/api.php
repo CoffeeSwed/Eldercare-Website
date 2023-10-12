@@ -460,5 +460,29 @@
         return push_response(STATUS_ERROR,USER_NOT_FOUND);
     }
 
+    public function getNotification(?String $session, ?String $date){
+        if($date == null){
+            $date = get_date_today();
+        }
+        if($session != null){
+
+            $this->getStorage()->getSessionKey($this->getSession());
+            
+            $user = $this->getStorage()->get_user_from_session($this->getSession());
+            if($user != null){
+                $notifications = new Notifications($this->getDinnersInstance(),$this->getStorage());
+                $notification = $notifications->getNotification($user);
+                
+                
+
+                if($notification != null){
+                    return push_response(STATUS_OK,array("notification" => $notification->to_array()));
+                }else{
+                    return push_response(STATUS_OK,array("notification" => null));
+                }
+            }
+        }
+        return push_response(STATUS_ERROR,BAD_SESSION_ID);
+    }
 }
 ?>

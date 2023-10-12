@@ -45,6 +45,7 @@
 	define("GET_MATCHING_USERS","get_matching_users");
 	define("SET_NOTE","set_note");
 	define("GET_EATEN","get_amount_of_eaten");
+	define("GET_NOTIFICATION","get_notification");
 
 
 	define("IS_VALID_SESSION","is_valid_session");
@@ -67,6 +68,13 @@
 	define("TYPE_GUEST","Guest");
 
 	define("BASETIME","1800-1-1");
+
+	define("NOTIFICATION_CRITICALITY_FATAL","FATAL");
+	define("NOTIFICATION_CRITICALITY_NONE","NONE");
+	define("NOTIFICATION_CRITICALITY_NOW","NOW");
+	define("NOTIFICATION_CRITICALITY_LOW","LOW");
+	define("NOTIFICATION_CRITICALITY_MEDIUM","MEDIUM");
+	define("NOTIFICATION_CRITICALITY_HIGH","HIGH");
 
 	
 	function get_cfg_val($name){
