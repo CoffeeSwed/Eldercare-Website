@@ -744,7 +744,6 @@ class Mysql implements Storage{
         
         $where = array();
         
-        //user_name
         if($user->getUsername() != ""){
             $where["username"] = $user->getUsername();
         }
