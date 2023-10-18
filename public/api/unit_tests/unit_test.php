@@ -117,6 +117,20 @@ class Unit_Test{
 		array_push($this->getEntries(),$entry);
 	}
 
+	public function addEntryS($name,$message){
+		$this->addEntry(new Unit_Test_Entry($name,STATUS_OK,$message));
+	}
+
+
+	public function addEntryW($name,$message){
+		$this->addEntry(new Unit_Test_Entry($name,STATUS_WARNING,$message));
+	}
+
+
+	public function addEntryE($name,$message){
+		$this->addEntry(new Unit_Test_Entry($name,STATUS_ERROR,$message));
+	}
+
     public function __construct(){
         $this->setName("");
         $this->setEntries(array());

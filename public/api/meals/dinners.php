@@ -244,36 +244,8 @@ class Dinners{
 	}
 
 
-	public function createNotification(User $user, String $date){
-		$date = new DateTimeImmutable($date,new DateTimeZone(get_cfg_val("time_zone")));
-		$longest = null;
-		$longest_entry = null;
-		foreach($this->getDinners() as $dinner){
-			$time = $dinner->getMinutesSinceShouldBeEaten($date);
-			if($longest == null || $longest->getMinutesSinceShouldBeEaten($date) < ($time + ($time < 0 ? 24*60 : 0))){
-				$datetorequest = new DateTimeImmutable($date->format("Y/m/d"),$date->getTimezone());
-				if($time < 0){
-					$datetorequest = $datetorequest->sub(new DateInterval("P1D"));
-				}
-				$datetorequest = get_date_by_str($datetorequest->format("Y/m/d"),null);
-				$entry = $this->loadMealPlanEntry($dinner,$user,$datetorequest,null);
-				if($entry != null){
-					if(!$entry->getHas_eaten()){
-						$longest = $dinner;
-						$longest_entry = $entry;
-					}
-				}
-			}
-		}
-		if($longest != null){
-			$not = new Notification();
-			$not->setSwedish_message("Har du glömt att äta ".$longest->getSwedish_name()."?");
-			$not->setEnglish_message("Have you forgotton to eat ".$longest->getEnglish_name()."?");
-			$not->setId($user->getId()."_".$longest_entry->getId());
-			return $not;
-		}
-		return null;
-	}
+	
+	
 
 
 }

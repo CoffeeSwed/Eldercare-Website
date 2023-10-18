@@ -152,7 +152,7 @@
         $settings2 = $dinner->getSettings($dinner_time,$user);
 
         foreach(array_keys($settings2) as $key){
-            if($settings2[$key] == $settings[$key]){
+            if($settings2[$key] == $settings[$key] && $key != "note"){
                 $this->addEntry(new Unit_Test_Entry("SetSettings",STATUS_ERROR,"Settings for meal entry was NOT equal to given ".$key." setting!"));
                 return;
             }

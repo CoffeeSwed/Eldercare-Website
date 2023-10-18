@@ -209,6 +209,10 @@
 	 "parents" => $this->get_parents());
 	}
 
+	public function to_array(){
+		return $this->to_json();
+	}
+
 	/**
 	 * @return mixed
 	 */
